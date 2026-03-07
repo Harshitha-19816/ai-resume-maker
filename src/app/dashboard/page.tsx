@@ -49,6 +49,7 @@ interface Resume {
 export default function DashboardPage() {
     const [resumes, setResumes] = useState<Resume[]>([]);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
     const [newTitle, setNewTitle] = useState("");
     const [dialogOpen, setDialogOpen] = useState(false);
     const [creating, setCreating] = useState(false);
@@ -60,24 +61,42 @@ export default function DashboardPage() {
     }, []);
 
     const fetchResumes = async () => {
-        const {
-            data: { user },
-        } = await supabase.auth.getUser();
-        if (!user) {
-            router.push("/login");
-            return;
-        }
+        try {
+            const {
+                data: { user },
+                error: authError,
+            } = await supabase.auth.getUser();
 
-        const { data, error } = await supabase
-            .from("resumes")
-            .select("*")
-            .eq("user_id", user.id)
-            .order("updated_at", { ascending: false });
+            if (authError) {
+                console.error("Auth error:", authError.message);
+                setError("Authentication failed. Please sign in again.");
+                setLoading(false);
+                return;
+            }
 
-        if (!error && data) {
-            setResumes(data);
+            if (!user) {
+                router.push("/login");
+                return;
+            }
+
+            const { data, error: fetchError } = await supabase
+                .from("resumes")
+                .select("*")
+                .eq("user_id", user.id)
+                .order("updated_at", { ascending: false });
+
+            if (fetchError) {
+                console.error("Fetch error:", fetchError.message);
+                setError("Failed to load resumes. Please try again.");
+            } else if (data) {
+                setResumes(data);
+            }
+        } catch (err) {
+            console.error("Connection error:", err);
+            setError("Could not connect to server. Please check your connection and try again.");
+        } finally {
+            setLoading(false);
         }
-        setLoading(false);
     };
 
     const createResume = async () => {
@@ -149,6 +168,35 @@ export default function DashboardPage() {
         return (
             <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center">
                 <Loader2 className="w-8 h-8 animate-spin text-violet-500" />
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center">
+                <div className="text-center max-w-md mx-auto px-6">
+                    <div className="w-16 h-16 rounded-2xl bg-red-500/10 flex items-center justify-center mx-auto mb-4">
+                        <FileText className="w-8 h-8 text-red-400" />
+                    </div>
+                    <h2 className="text-xl font-semibold text-white mb-2">Something went wrong</h2>
+                    <p className="text-gray-500 text-sm mb-6">{error}</p>
+                    <div className="flex gap-3 justify-center">
+                        <Button
+                            onClick={() => { setError(null); setLoading(true); fetchResumes(); }}
+                            className="gap-2 bg-gradient-to-r from-violet-600 to-blue-600 text-white border-0"
+                        >
+                            Try Again
+                        </Button>
+                        <Button
+                            variant="outline"
+                            onClick={() => router.push("/login")}
+                            className="gap-2 border-white/10 text-gray-400 hover:text-white"
+                        >
+                            Sign In Again
+                        </Button>
+                    </div>
+                </div>
             </div>
         );
     }

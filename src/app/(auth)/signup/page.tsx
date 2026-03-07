@@ -26,19 +26,23 @@ export default function SignupPage() {
         }
 
         setLoading(true);
-        const { error } = await supabase.auth.signUp({
-            email,
-            password,
-            options: {
-                emailRedirectTo: `${window.location.origin}/auth/callback`,
-            },
-        });
+        try {
+            const { error } = await supabase.auth.signUp({
+                email,
+                password,
+                options: {
+                    emailRedirectTo: `${window.location.origin}/auth/callback`,
+                },
+            });
 
-        if (error) {
-            toast.error(error.message);
-        } else {
-            toast.success("Account created! You can now sign in.");
-            router.push("/login");
+            if (error) {
+                toast.error(error.message);
+            } else {
+                toast.success("Account created! Redirecting to dashboard...");
+                router.push("/dashboard");
+            }
+        } catch {
+            toast.error("Could not connect to server. Please try again later.");
         }
         setLoading(false);
     };
