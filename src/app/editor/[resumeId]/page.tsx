@@ -128,12 +128,30 @@ export default function EditorPage() {
                 return;
             }
 
+            // Temporarily reset scale on the preview container for proper capture
+            const previewContainer = element.parentElement;
+            const originalTransform = previewContainer?.style.transform || "";
+            if (previewContainer) {
+                previewContainer.style.transform = "none";
+            }
+
+            // Wait for reflow
+            await new Promise((resolve) => setTimeout(resolve, 100));
+
             const canvas = await html2canvas(element, {
                 scale: 2,
                 useCORS: true,
+                allowTaint: true,
                 logging: false,
                 backgroundColor: "#ffffff",
+                windowWidth: element.scrollWidth,
+                windowHeight: element.scrollHeight,
             });
+
+            // Restore original scale
+            if (previewContainer) {
+                previewContainer.style.transform = originalTransform;
+            }
 
             const imgData = canvas.toDataURL("image/png");
             const pdf = new jsPDF("p", "mm", "a4");
@@ -145,7 +163,7 @@ export default function EditorPage() {
             toast.success("PDF exported!");
         } catch (error) {
             console.error("PDF export error:", error);
-            toast.error("Failed to export PDF");
+            toast.error("Failed to export PDF. Try using a different browser.");
         } finally {
             setExporting(false);
         }
