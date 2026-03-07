@@ -32,8 +32,6 @@ import {
     Save,
 } from "lucide-react";
 import { toast } from "sonner";
-import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
 
 export default function EditorPage() {
     const params = useParams();
@@ -125,45 +123,72 @@ export default function EditorPage() {
             const element = document.getElementById("resume-preview");
             if (!element) {
                 toast.error("Preview not found");
+                setExporting(false);
                 return;
             }
 
-            // Temporarily reset scale on the preview container for proper capture
-            const previewContainer = element.parentElement;
-            const originalTransform = previewContainer?.style.transform || "";
-            if (previewContainer) {
-                previewContainer.style.transform = "none";
+            // Open a new window with just the resume for clean printing
+            const printWindow = window.open("", "_blank");
+            if (!printWindow) {
+                toast.error("Please allow pop-ups to export PDF");
+                setExporting(false);
+                return;
             }
 
-            // Wait for reflow
-            await new Promise((resolve) => setTimeout(resolve, 100));
+            // Get all stylesheets from the current page
+            const stylesheets = Array.from(document.styleSheets)
+                .map((sheet) => {
+                    try {
+                        return Array.from(sheet.cssRules)
+                            .map((rule) => rule.cssText)
+                            .join("\n");
+                    } catch {
+                        return "";
+                    }
+                })
+                .join("\n");
 
-            const canvas = await html2canvas(element, {
-                scale: 2,
-                useCORS: true,
-                allowTaint: true,
-                logging: false,
-                backgroundColor: "#ffffff",
-                windowWidth: element.scrollWidth,
-                windowHeight: element.scrollHeight,
-            });
+            printWindow.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>${title || "Resume"}</title>
+                    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+                    <style>
+                        ${stylesheets}
+                        * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
+                        @page { size: A4; margin: 0; }
+                        body { margin: 0; padding: 0; background: white; }
+                        #print-resume { width: 210mm; min-height: 297mm; margin: 0 auto; }
+                    </style>
+                </head>
+                <body>
+                    <div id="print-resume">${element.outerHTML}</div>
+                </body>
+                </html>
+            `);
+            printWindow.document.close();
 
-            // Restore original scale
-            if (previewContainer) {
-                previewContainer.style.transform = originalTransform;
-            }
+            // Wait for fonts and styles to load
+            printWindow.onload = () => {
+                setTimeout(() => {
+                    printWindow.print();
+                    printWindow.close();
+                }, 500);
+            };
 
-            const imgData = canvas.toDataURL("image/png");
-            const pdf = new jsPDF("p", "mm", "a4");
-            const pdfWidth = pdf.internal.pageSize.getWidth();
-            const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+            // Fallback if onload doesn't fire
+            setTimeout(() => {
+                try {
+                    printWindow.print();
+                    printWindow.close();
+                } catch { /* window may already be closed */ }
+            }, 2000);
 
-            pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-            pdf.save(`${title || "resume"}.pdf`);
-            toast.success("PDF exported!");
+            toast.success("Print dialog opened! Select 'Save as PDF' to download.");
         } catch (error) {
             console.error("PDF export error:", error);
-            toast.error("Failed to export PDF. Try using a different browser.");
+            toast.error("Failed to export PDF");
         } finally {
             setExporting(false);
         }
