@@ -44,7 +44,7 @@ export default async function SharePage({ params }: SharePageProps) {
                             {resumeData.personalInfo.fullName || "Resume"}
                         </h1>
                         <p className="text-[10px] text-gray-500 uppercase tracking-widest font-bold">
-                            Shared via ResumeAI
+                            Shared via AI Resume Studio
                         </p>
                     </div>
                 </div>
@@ -71,7 +71,7 @@ export default async function SharePage({ params }: SharePageProps) {
 
             <footer className="py-6 border-t border-white/5 text-center shrink-0 relative z-10">
                 <p className="text-gray-600 text-[11px] font-medium tracking-wide">
-                    RESUMEAI — AI-POWERED PROFESSIONAL RESUME BUILDER
+                    AI RESUME STUDIO — AI-POWERED PROFESSIONAL RESUME BUILDER
                 </p>
             </footer>
         </div>

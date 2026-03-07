@@ -192,7 +192,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-2 text-sm text-gray-600">
             <FileText className="w-4 h-4" />
-            <span>ResumeAI © 2026</span>
+            <span>AI Resume Studio © 2026</span>
           </div>
           <p className="text-sm text-gray-600">
             Built with Next.js, Supabase & AI

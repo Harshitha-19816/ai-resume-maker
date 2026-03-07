@@ -49,7 +49,7 @@ export default function LoginPage() {
                             <FileText className="w-5 h-5 text-white" />
                         </div>
                         <span className="font-bold text-2xl text-white tracking-tight">
-                            Resume<span className="text-violet-400">AI</span>
+                            AI Resume <span className="text-violet-400">Studio</span>
                         </span>
                     </Link>
                     <h1 className="text-3xl font-bold text-white mb-2">Welcome Back</h1>

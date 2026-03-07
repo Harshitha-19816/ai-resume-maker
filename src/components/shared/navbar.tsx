@@ -26,7 +26,7 @@ export default function Navbar() {
                             <FileText className="w-4.5 h-4.5 text-white" />
                         </div>
                         <span className="font-bold text-xl text-white tracking-tight">
-                            Resume<span className="text-violet-400">AI</span>
+                            AI Resume <span className="text-violet-400">Studio</span>
                         </span>
                     </Link>
 
@@ -37,8 +37,8 @@ export default function Navbar() {
                                 key={link.href}
                                 href={link.href}
                                 className={`px-4 py-2 rounded-lg text-xs font-semibold tracking-wider transition-colors ${isActive(link.href)
-                                        ? "text-white bg-white/10"
-                                        : "text-gray-400 hover:text-white hover:bg-white/5"
+                                    ? "text-white bg-white/10"
+                                    : "text-gray-400 hover:text-white hover:bg-white/5"
                                     }`}
                             >
                                 {link.label}

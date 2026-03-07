@@ -9,7 +9,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "ResumeAI — AI-Powered Resume Builder",
+  title: "AI Resume Studio — AI-Powered Resume Builder",
   description:
     "Create, edit, and optimize professional resumes with AI. Beautiful templates, live preview, and one-click PDF export.",
   keywords: ["resume builder", "AI resume", "career", "professional resume", "PDF export"],
