@@ -51,7 +51,7 @@ export default function Navbar() {
                         <Button
                             variant="outline"
                             size="sm"
-                            className="border-white/10 text-gray-300 hover:text-white hover:bg-white/5 gap-2"
+                            className="border-violet-500/30 text-violet-400 hover:text-white hover:bg-violet-600/20 gap-2"
                         >
                             Sign In
                         </Button>

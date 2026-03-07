@@ -55,7 +55,7 @@ export default function HomePage() {
               <Button
                 variant="outline"
                 size="lg"
-                className="text-base px-8 py-6 border-white/10 text-gray-300 hover:text-white hover:bg-white/5"
+                className="text-base px-8 py-6 border-violet-500/30 text-violet-400 hover:text-white hover:bg-violet-600/20"
               >
                 Get Started Free
               </Button>
