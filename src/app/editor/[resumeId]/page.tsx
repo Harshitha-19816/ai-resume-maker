@@ -32,7 +32,7 @@ import {
     Save,
 } from "lucide-react";
 import { toast } from "sonner";
-import html2canvas from "html2canvas";
+import { toPng } from "html-to-image";
 import jsPDF from "jspdf";
 
 export default function EditorPage() {
@@ -122,58 +122,47 @@ export default function EditorPage() {
                 return;
             }
 
-            // Create a wrapper to hold the clone at full scale
-            const wrapper = document.createElement("div");
-            wrapper.style.position = "fixed";
-            wrapper.style.top = "-10000px";
-            wrapper.style.left = "-10000px";
-            wrapper.style.width = "794px";
-            wrapper.style.zIndex = "-1";
-            wrapper.style.overflow = "visible";
-            wrapper.style.background = "white";
+            // Save current transform and temporarily reset it
+            const parent = element.parentElement;
+            const originalTransform = parent?.style.transform || "";
+            if (parent) {
+                parent.style.transform = "none";
+            }
 
-            // Clone the resume preview
-            const clone = element.cloneNode(true) as HTMLElement;
-            clone.style.transform = "none";
-            clone.style.width = "794px";
-            clone.style.minHeight = "1123px";
-            clone.style.background = "white";
-            clone.style.margin = "0";
-            clone.style.padding = clone.style.padding || "0";
+            // Wait for reflow
+            await new Promise((r) => setTimeout(r, 200));
 
-            // Remove all SVG elements (html2canvas can't render them reliably)
-            const svgs = clone.querySelectorAll("svg");
-            svgs.forEach((svg) => svg.remove());
-
-            wrapper.appendChild(clone);
-            document.body.appendChild(wrapper);
-
-            // Wait for layout to stabilize
-            await new Promise((r) => setTimeout(r, 300));
-
-            const canvas = await html2canvas(clone, {
-                scale: 2,
-                useCORS: true,
-                allowTaint: true,
+            // Use html-to-image (handles SVGs and modern CSS natively)
+            const imgData = await toPng(element, {
+                quality: 1,
+                pixelRatio: 2,
                 backgroundColor: "#ffffff",
-                logging: false,
-                foreignObjectRendering: false,
-                removeContainer: false,
+                skipFonts: true,
             });
 
-            document.body.removeChild(wrapper);
+            // Restore the transform
+            if (parent) {
+                parent.style.transform = originalTransform;
+            }
 
-            const imgData = canvas.toDataURL("image/png");
+            // Create PDF
             const pdf = new jsPDF({
                 orientation: "portrait",
                 unit: "mm",
                 format: "a4",
             });
 
-            const pdfWidth = 210;
-            const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+            // Load the image to get dimensions
+            const img = new Image();
+            img.src = imgData;
+            await new Promise((resolve) => {
+                img.onload = resolve;
+            });
 
-            // Handle multi-page if content is longer than A4
+            const pdfWidth = 210;
+            const pdfHeight = (img.height * pdfWidth) / img.width;
+
+            // Handle multi-page
             if (pdfHeight > 297) {
                 const pageHeight = 297;
                 let position = 0;
