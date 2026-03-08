@@ -1,222 +1,137 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { createClient } from "@/lib/supabase/client";
-import { SAMPLE_RESUME_DATA } from "@/lib/sample-data";
-import { ResumeTemplate } from "@/types/resume";
-import ResumePreview from "@/components/resume/resume-preview";
 import { Button } from "@/components/ui/button";
-import {
-    FileText,
-    ArrowRight,
-    Check,
-    Loader2,
-    Sparkles,
-} from "lucide-react";
-import { toast } from "sonner";
-import { v4 as uuidv4 } from "uuid";
 import Navbar from "@/components/shared/navbar";
+import { ArrowRight, Eye, Sparkles, FileText } from "lucide-react";
+import { useState } from "react";
 
-const TEMPLATES: {
-    id: ResumeTemplate;
-    name: string;
-    description: string;
-    tag?: string;
-}[] = [
-        {
-            id: "modern",
-            name: "Modern Clean",
-            description:
-                "Standard ATS-friendly layout with clean lines. Perfect for most corporate roles.",
-            tag: "Popular",
-        },
-        {
-            id: "classic",
-            name: "Executive Professional",
-            description:
-                "Bold, heavy serif headers with centered name. Ideal for senior management positions.",
-        },
-        {
-            id: "minimal",
-            name: "Tech Minimalist",
-            description:
-                "Compact, clean layout designed for software engineers and IT professionals.",
-        },
-        {
-            id: "professional",
-            name: "Sidebar Professional",
-            description:
-                "Two-column layout with dark sidebar. Great for creative and technical roles.",
-            tag: "New",
-        },
-    ];
+const TEMPLATES = [
+    {
+        id: "modern",
+        name: "Modern Clean",
+        description: "A contemporary design with a gradient header, clean sections, and accent colors. Perfect for creative and tech roles.",
+        color: "from-indigo-500 to-purple-500",
+        tag: "Popular",
+    },
+    {
+        id: "classic",
+        name: "Executive",
+        description: "A traditional layout with serif typography and bordered sections. Ideal for senior roles and formal industries.",
+        color: "from-slate-600 to-slate-800",
+        tag: "Professional",
+    },
+    {
+        id: "minimal",
+        name: "Minimal",
+        description: "Ultra-clean design with generous whitespace and subtle typography. Great for designers and modern professionals.",
+        color: "from-emerald-500 to-teal-500",
+        tag: "Trending",
+    },
+    {
+        id: "professional",
+        name: "Sidebar Pro",
+        description: "Two-column layout with a dark sidebar for contact info and skills. Makes a strong visual impression.",
+        color: "from-cyan-500 to-blue-500",
+        tag: "ATS-Friendly",
+    },
+];
 
 export default function TemplatesPage() {
-    const [selectedTemplate, setSelectedTemplate] = useState<ResumeTemplate | null>(null);
-    const [creating, setCreating] = useState(false);
-    const router = useRouter();
-    const supabase = createClient();
-
-    const handleUseTemplate = async (templateId: ResumeTemplate) => {
-        setCreating(true);
-        setSelectedTemplate(templateId);
-
-        try {
-            const {
-                data: { user },
-            } = await supabase.auth.getUser();
-
-            if (!user) {
-                router.push("/login");
-                return;
-            }
-
-            const slug = uuidv4().slice(0, 8);
-            const { data, error } = await supabase
-                .from("resumes")
-                .insert({
-                    user_id: user.id,
-                    title: `${TEMPLATES.find((t) => t.id === templateId)?.name || "New"} Resume`,
-                    template: templateId,
-                    public_slug: slug,
-                })
-                .select()
-                .single();
-
-            if (error) {
-                toast.error("Failed to create resume. Please sign in first.");
-                router.push("/login");
-            } else if (data) {
-                toast.success("Resume created with template!");
-                router.push(`/editor/${data.id}`);
-            }
-        } catch {
-            toast.error("Something went wrong");
-        } finally {
-            setCreating(false);
-            setSelectedTemplate(null);
-        }
-    };
+    const [hoveredId, setHoveredId] = useState<string | null>(null);
 
     return (
-        <div className="min-h-screen bg-[#0a0a0f]">
+        <div className="min-h-screen bg-[#060918] noise-overlay">
             <Navbar />
 
-            {/* Hero Section */}
-            <section className="relative pt-16 pb-12 px-4 overflow-hidden">
-                <div className="absolute top-0 left-1/4 w-96 h-96 bg-violet-600/10 rounded-full blur-[120px] pointer-events-none" />
-                <div className="absolute top-20 right-1/4 w-80 h-80 bg-blue-600/10 rounded-full blur-[100px] pointer-events-none" />
-
-                <div className="max-w-6xl mx-auto text-center relative z-10">
-                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-400 text-sm font-medium mb-6">
-                        <Sparkles className="w-3.5 h-3.5" />
-                        Choose Your Design
+            <section className="pt-28 pb-20 px-4">
+                <div className="max-w-5xl mx-auto">
+                    {/* Header */}
+                    <div className="text-center mb-14">
+                        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass text-sm text-slate-400 mb-5">
+                            <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
+                            {TEMPLATES.length} Templates Available
+                        </div>
+                        <h1 className="text-4xl md:text-5xl font-bold text-slate-100 mb-4">
+                            Choose Your{" "}
+                            <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+                                Template
+                            </span>
+                        </h1>
+                        <p className="text-slate-400 max-w-lg mx-auto">
+                            Each template is designed to be ATS-friendly and professionally formatted.
+                            Pick one and start editing.
+                        </p>
                     </div>
-                    <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-[1.1] mb-4">
-                        Resume{" "}
-                        <span className="bg-gradient-to-r from-violet-400 via-blue-400 to-cyan-400 bg-clip-text text-transparent">
-                            Templates
-                        </span>
-                    </h1>
-                    <p className="text-lg text-gray-400 max-w-2xl mx-auto">
-                        Professional, ATS-optimized templates designed to make your resume stand out. Click any template to start building.
-                    </p>
-                </div>
-            </section>
 
-            {/* Templates Grid */}
-            <section className="px-4 pb-20">
-                <div className="max-w-7xl mx-auto grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                    {TEMPLATES.map((template) => (
-                        <div
-                            key={template.id}
-                            className="group relative rounded-2xl bg-[#12121a] border border-white/5 overflow-hidden hover:border-violet-500/30 transition-all duration-300 hover:shadow-2xl hover:shadow-violet-500/5"
-                        >
-                            {/* Tag */}
-                            {template.tag && (
-                                <div className="absolute top-3 right-3 z-20 px-2.5 py-0.5 rounded-full bg-violet-500 text-white text-[10px] font-bold uppercase tracking-wider">
-                                    {template.tag}
-                                </div>
-                            )}
+                    {/* Template Grid */}
+                    <div className="grid md:grid-cols-2 gap-6">
+                        {TEMPLATES.map((template) => (
+                            <div
+                                key={template.id}
+                                className="glass-card rounded-2xl overflow-hidden group"
+                                onMouseEnter={() => setHoveredId(template.id)}
+                                onMouseLeave={() => setHoveredId(null)}
+                            >
+                                {/* Preview Area */}
+                                <div className="relative h-52 overflow-hidden">
+                                    <div className={`absolute inset-0 bg-gradient-to-br ${template.color} opacity-15`} />
+                                    <div className="absolute inset-0 flex items-center justify-center">
+                                        <div className="w-28 h-40 bg-white/90 rounded-lg shadow-xl flex flex-col p-3 text-[5px] text-gray-600 leading-tight group-hover:scale-110 transition-transform duration-500">
+                                            <div className={`h-5 rounded bg-gradient-to-r ${template.color} mb-2`} />
+                                            <div className="h-1.5 bg-gray-200 rounded w-3/4 mb-1" />
+                                            <div className="h-1 bg-gray-100 rounded w-full mb-0.5" />
+                                            <div className="h-1 bg-gray-100 rounded w-5/6 mb-0.5" />
+                                            <div className="h-1 bg-gray-100 rounded w-4/6 mb-2" />
+                                            <div className="h-1.5 bg-gray-200 rounded w-1/2 mb-1" />
+                                            <div className="h-1 bg-gray-100 rounded w-full mb-0.5" />
+                                            <div className="h-1 bg-gray-100 rounded w-3/4" />
+                                        </div>
+                                    </div>
 
-                            {/* Template Preview */}
-                            <div className="relative h-[320px] overflow-hidden bg-gray-950 border-b border-white/5">
-                                <div className="absolute inset-0 flex items-start justify-center pt-3 px-3">
-                                    <div className="transform scale-[0.28] origin-top w-[210mm]">
-                                        <ResumePreview
-                                            data={SAMPLE_RESUME_DATA}
-                                            template={template.id}
-                                        />
+                                    {/* Tag */}
+                                    <span className="absolute top-4 right-4 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider rounded-full bg-black/40 text-white/80 backdrop-blur-sm">
+                                        {template.tag}
+                                    </span>
+
+                                    {/* Hover Overlay */}
+                                    <div className={`absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center transition-opacity duration-300 ${hoveredId === template.id ? "opacity-100" : "opacity-0"
+                                        }`}>
+                                        <Link href="/signup">
+                                            <Button className="gap-2 bg-gradient-to-r from-emerald-500 to-cyan-500 text-white border-0 rounded-xl shadow-lg shadow-emerald-500/20">
+                                                Use Template <ArrowRight className="w-4 h-4" />
+                                            </Button>
+                                        </Link>
                                     </div>
                                 </div>
 
-                                {/* Hover Overlay */}
-                                <div className="absolute inset-0 bg-gradient-to-t from-[#12121a] via-transparent to-transparent opacity-60" />
-                                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/40 backdrop-blur-sm">
-                                    <Button
-                                        onClick={() => handleUseTemplate(template.id)}
-                                        disabled={creating}
-                                        className="bg-violet-600 hover:bg-violet-500 text-white gap-2 shadow-xl shadow-violet-500/25 px-6"
-                                    >
-                                        {creating && selectedTemplate === template.id ? (
-                                            <>
-                                                <Loader2 className="w-4 h-4 animate-spin" />
-                                                Creating...
-                                            </>
-                                        ) : (
-                                            <>
-                                                Select Template <ArrowRight className="w-4 h-4" />
-                                            </>
-                                        )}
-                                    </Button>
+                                {/* Info */}
+                                <div className="p-5">
+                                    <h3 className="font-semibold text-lg text-slate-100 mb-1 group-hover:text-emerald-400 transition-colors">
+                                        {template.name}
+                                    </h3>
+                                    <p className="text-sm text-slate-500 leading-relaxed">
+                                        {template.description}
+                                    </p>
                                 </div>
                             </div>
-
-                            {/* Info */}
-                            <div className="p-5">
-                                <h3 className="font-semibold text-white text-lg mb-1.5">
-                                    {template.name}
-                                </h3>
-                                <p className="text-gray-500 text-sm leading-relaxed">
-                                    {template.description}
-                                </p>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </section>
-
-            {/* CTA */}
-            <section className="px-4 pb-20">
-                <div className="max-w-3xl mx-auto text-center">
-                    <div className="p-10 rounded-3xl bg-gradient-to-br from-violet-600/10 via-blue-600/5 to-cyan-600/5 border border-violet-500/10">
-                        <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3">
-                            Can&apos;t decide?
-                        </h2>
-                        <p className="text-gray-400 mb-6">
-                            Start with any template — you can switch between them anytime in the editor.
-                        </p>
-                        <Link href="/dashboard">
-                            <Button className="bg-violet-600 hover:bg-violet-500 text-white gap-2 px-8 py-5 shadow-lg shadow-violet-500/20">
-                                Go to Dashboard <ArrowRight className="w-4 h-4" />
-                            </Button>
-                        </Link>
+                        ))}
                     </div>
                 </div>
             </section>
 
             {/* Footer */}
             <footer className="border-t border-white/5 py-8 px-4">
-                <div className="max-w-7xl mx-auto flex items-center justify-between">
-                    <div className="flex items-center gap-2 text-sm text-gray-600">
-                        <FileText className="w-4 h-4" />
-                        <span>AI Resume Studio © 2026</span>
+                <div className="max-w-5xl mx-auto flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                        <div className="w-6 h-6 rounded-md bg-gradient-to-br from-emerald-500 to-cyan-500 flex items-center justify-center">
+                            <FileText className="w-3 h-3 text-white" />
+                        </div>
+                        <span className="text-sm text-slate-500">AI Resume Studio © 2026</span>
                     </div>
-                    <p className="text-sm text-gray-600">
-                        Built with Next.js, Supabase & AI
-                    </p>
+                    <Link href="/dashboard" className="text-sm text-slate-500 hover:text-emerald-400 transition-colors">
+                        Go to Dashboard →
+                    </Link>
                 </div>
             </footer>
         </div>

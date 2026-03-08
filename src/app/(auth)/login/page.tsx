@@ -7,8 +7,15 @@ import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { FileText, Mail, Lock, Loader2, ArrowRight, Sparkles } from "lucide-react";
+import { FileText, Mail, Lock, Loader2, ArrowRight, Sparkles, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
+
+const FEATURES = [
+    "AI-powered content generation",
+    "4 professional templates",
+    "ATS-optimized formatting",
+    "One-click PDF export",
+];
 
 export default function LoginPage() {
     const [email, setEmail] = useState("");
@@ -20,110 +27,132 @@ export default function LoginPage() {
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
-
-        const { error } = await supabase.auth.signInWithPassword({
-            email,
-            password,
-        });
-
-        if (error) {
-            toast.error(error.message);
-        } else {
-            toast.success("Welcome back!");
-            router.push("/dashboard");
-            router.refresh();
+        try {
+            const { error } = await supabase.auth.signInWithPassword({
+                email,
+                password,
+            });
+            if (error) {
+                toast.error(error.message);
+            } else {
+                router.push("/dashboard");
+            }
+        } catch {
+            toast.error("Could not connect to server. Please try again.");
         }
         setLoading(false);
     };
 
     return (
-        <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center p-4 relative overflow-hidden">
-            {/* Background Orbs */}
-            <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-violet-600/10 rounded-full blur-[120px] pointer-events-none" />
-            <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-600/10 rounded-full blur-[120px] pointer-events-none" />
+        <div className="min-h-screen bg-[#060918] flex">
+            {/* Left Panel — Brand */}
+            <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden">
+                <div className="aurora-hero absolute inset-0" />
+                <div className="absolute top-[20%] left-[10%] w-80 h-80 bg-emerald-500/10 rounded-full blur-[120px]" />
+                <div className="absolute bottom-[20%] right-[10%] w-60 h-60 bg-cyan-500/8 rounded-full blur-[100px]" />
 
-            <div className="w-full max-w-[440px] relative z-10">
-                <div className="text-center mb-8">
-                    <Link href="/" className="inline-flex items-center gap-2.5 mb-6 group">
-                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-600 to-blue-600 flex items-center justify-center shadow-lg shadow-violet-500/20 group-hover:scale-110 transition-transform">
+                <div className="relative flex flex-col justify-center px-16 z-10">
+                    <Link href="/" className="flex items-center gap-2.5 mb-12">
+                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-cyan-500 flex items-center justify-center shadow-lg shadow-emerald-500/20">
                             <FileText className="w-5 h-5 text-white" />
                         </div>
-                        <span className="font-bold text-2xl text-white tracking-tight">
-                            AI Resume <span className="text-violet-400">Studio</span>
+                        <span className="font-bold text-2xl text-slate-100">
+                            AI Resume <span className="text-emerald-400">Studio</span>
                         </span>
                     </Link>
-                    <h1 className="text-3xl font-bold text-white mb-2">Welcome Back</h1>
-                    <p className="text-gray-400">Sign in to your account to continue</p>
-                </div>
 
-                <div className="bg-[#12121a] border border-white/5 p-8 rounded-3xl shadow-2xl">
-                    <form onSubmit={handleLogin} className="space-y-5">
-                        <div className="space-y-2">
-                            <Label htmlFor="email" className="text-gray-300 text-sm font-medium ml-1">Email Address</Label>
-                            <div className="relative">
-                                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
-                                <Input
-                                    id="email"
-                                    type="email"
-                                    placeholder="name@example.com"
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    className="pl-10 bg-white/5 border-white/10 text-white placeholder:text-gray-600 focus:border-violet-500/50 focus:ring-violet-500/20 h-12 rounded-xl"
-                                    required
-                                />
+                    <h2 className="text-4xl font-bold text-slate-100 leading-tight mb-4">
+                        Welcome back to your
+                        <br />
+                        <span className="text-emerald-400">resume workspace.</span>
+                    </h2>
+                    <p className="text-slate-400 mb-10 max-w-sm leading-relaxed">
+                        Pick up where you left off. Your resumes, templates, and AI tools are ready.
+                    </p>
+
+                    <div className="space-y-3">
+                        {FEATURES.map((feature) => (
+                            <div key={feature} className="flex items-center gap-3">
+                                <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                                <span className="text-sm text-slate-400">{feature}</span>
                             </div>
-                        </div>
-
-                        <div className="space-y-2">
-                            <div className="flex items-center justify-between ml-1">
-                                <Label htmlFor="password" className="text-gray-300 text-sm font-medium">Password</Label>
-                                <Link href="#" className="text-xs text-violet-400 hover:text-violet-300">Forgot password?</Link>
-                            </div>
-                            <div className="relative">
-                                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
-                                <Input
-                                    id="password"
-                                    type="password"
-                                    placeholder="••••••••"
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    className="pl-10 bg-white/5 border-white/10 text-white placeholder:text-gray-600 focus:border-violet-500/50 focus:ring-violet-500/20 h-12 rounded-xl"
-                                    required
-                                />
-                            </div>
-                        </div>
-
-                        <Button
-                            type="submit"
-                            disabled={loading}
-                            className="w-full bg-gradient-to-r from-violet-600 to-blue-600 hover:from-violet-500 hover:to-blue-500 text-white h-12 rounded-xl border-0 shadow-lg shadow-violet-500/25 font-semibold text-base transition-all active:scale-[0.98]"
-                        >
-                            {loading ? (
-                                <>
-                                    <Loader2 className="w-5 h-5 animate-spin mr-2" />
-                                    Signing in...
-                                </>
-                            ) : (
-                                <>
-                                    Sign In <ArrowRight className="ml-2 w-4 h-4" />
-                                </>
-                            )}
-                        </Button>
-                    </form>
-
-                    <div className="mt-8 pt-6 border-t border-white/5 text-center">
-                        <p className="text-gray-500 text-sm">
-                            Don&apos;t have an account?{" "}
-                            <Link href="/signup" className="text-violet-400 hover:text-violet-300 font-semibold ml-1">
-                                Sign up for free
-                            </Link>
-                        </p>
+                        ))}
                     </div>
                 </div>
+            </div>
 
-                <div className="mt-8 flex items-center justify-center gap-2 text-gray-600 text-xs">
-                    <Sparkles className="w-3 h-3" />
-                    Powered by AI & Supabase
+            {/* Right Panel — Form */}
+            <div className="flex-1 flex items-center justify-center p-6">
+                <div className="w-full max-w-[420px]">
+                    {/* Mobile Logo */}
+                    <div className="lg:hidden text-center mb-8">
+                        <Link href="/" className="inline-flex items-center gap-2">
+                            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-500 to-cyan-500 flex items-center justify-center">
+                                <FileText className="w-4.5 h-4.5 text-white" />
+                            </div>
+                            <span className="font-bold text-xl text-slate-100">
+                                AI Resume <span className="text-emerald-400">Studio</span>
+                            </span>
+                        </Link>
+                    </div>
+
+                    <div className="mb-8">
+                        <h1 className="text-2xl font-bold text-slate-100 mb-2">Sign in</h1>
+                        <p className="text-slate-500 text-sm">Enter your credentials to access your account</p>
+                    </div>
+
+                    <div className="glass-card rounded-2xl p-7">
+                        <form onSubmit={handleLogin} className="space-y-5">
+                            <div className="space-y-2">
+                                <Label className="text-slate-400 text-sm">Email</Label>
+                                <div className="relative">
+                                    <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-600" />
+                                    <Input
+                                        type="email"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        placeholder="name@example.com"
+                                        className="pl-10 bg-white/5 border-white/8 text-slate-100 placeholder:text-slate-600 focus:border-emerald-500/40 focus:ring-emerald-500/20 h-12 rounded-xl"
+                                        required
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="space-y-2">
+                                <Label className="text-slate-400 text-sm">Password</Label>
+                                <div className="relative">
+                                    <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-600" />
+                                    <Input
+                                        type="password"
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        placeholder="••••••••"
+                                        className="pl-10 bg-white/5 border-white/8 text-slate-100 placeholder:text-slate-600 focus:border-emerald-500/40 focus:ring-emerald-500/20 h-12 rounded-xl"
+                                        required
+                                    />
+                                </div>
+                            </div>
+
+                            <Button
+                                type="submit"
+                                disabled={loading}
+                                className="w-full bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-white h-12 rounded-xl border-0 shadow-lg shadow-emerald-500/20 font-semibold text-base"
+                            >
+                                {loading ? (
+                                    <><Loader2 className="w-5 h-5 animate-spin mr-2" /> Signing in...</>
+                                ) : (
+                                    <>Sign In <ArrowRight className="ml-2 w-4 h-4" /></>
+                                )}
+                            </Button>
+                        </form>
+                    </div>
+
+                    <p className="mt-6 text-center text-slate-500 text-sm">
+                        Don&apos;t have an account?{" "}
+                        <Link href="/signup" className="text-emerald-400 hover:text-emerald-300 font-semibold">
+                            Create one
+                        </Link>
+                    </p>
                 </div>
             </div>
         </div>

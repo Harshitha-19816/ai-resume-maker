@@ -39,8 +39,7 @@ export default function EditorPage() {
     const resumeId = params.resumeId as string;
     const supabase = createClient();
 
-    const [resumeData, setResumeData] =
-        useState<ResumeData>(DEFAULT_RESUME_DATA);
+    const [resumeData, setResumeData] = useState<ResumeData>(DEFAULT_RESUME_DATA);
     const [template, setTemplate] = useState<ResumeTemplate>("modern");
     const [title, setTitle] = useState("Untitled Resume");
     const [loading, setLoading] = useState(true);
@@ -62,9 +61,7 @@ export default function EditorPage() {
             return;
         }
 
-        setResumeData(
-            (data.resume_data as ResumeData) || DEFAULT_RESUME_DATA
-        );
+        setResumeData((data.resume_data as ResumeData) || DEFAULT_RESUME_DATA);
         setTemplate((data.template as ResumeTemplate) || "modern");
         setTitle(data.title);
         setLoading(false);
@@ -77,17 +74,13 @@ export default function EditorPage() {
     const saveResume = useCallback(
         async (data: ResumeData) => {
             setSaving(true);
-            const { error } = await supabase
+            await supabase
                 .from("resumes")
                 .update({
                     resume_data: data as unknown as Record<string, unknown>,
                     template,
                 })
                 .eq("id", resumeId);
-
-            if (error) {
-                console.error("Save error:", error);
-            }
             setSaving(false);
         },
         [resumeId, supabase, template]
@@ -127,7 +120,6 @@ export default function EditorPage() {
                 return;
             }
 
-            // Open a new window with just the resume for clean printing
             const printWindow = window.open("", "_blank");
             if (!printWindow) {
                 toast.error("Please allow pop-ups to export PDF");
@@ -135,7 +127,6 @@ export default function EditorPage() {
                 return;
             }
 
-            // Get all stylesheets from the current page
             const stylesheets = Array.from(document.styleSheets)
                 .map((sheet) => {
                     try {
@@ -156,7 +147,7 @@ export default function EditorPage() {
                     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
                     <style>
                         ${stylesheets}
-                        * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
+                        * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
                         @page { size: A4; margin: 0; }
                         body { margin: 0; padding: 0; background: white; }
                         #print-resume { width: 210mm; min-height: 297mm; margin: 0 auto; }
@@ -169,7 +160,6 @@ export default function EditorPage() {
             `);
             printWindow.document.close();
 
-            // Wait for fonts and styles to load
             printWindow.onload = () => {
                 setTimeout(() => {
                     printWindow.print();
@@ -177,17 +167,12 @@ export default function EditorPage() {
                 }, 500);
             };
 
-            // Fallback if onload doesn't fire
             setTimeout(() => {
-                try {
-                    printWindow.print();
-                    printWindow.close();
-                } catch { /* window may already be closed */ }
+                try { printWindow.print(); printWindow.close(); } catch { /* */ }
             }, 2000);
 
-            toast.success("Print dialog opened! Select 'Save as PDF' to download.");
-        } catch (error) {
-            console.error("PDF export error:", error);
+            toast.success("Print dialog opened! Select 'Save as PDF'.");
+        } catch {
             toast.error("Failed to export PDF");
         } finally {
             setExporting(false);
@@ -204,10 +189,7 @@ export default function EditorPage() {
             });
             const result = await res.json();
             if (result.suggestions) {
-                toast.info(result.suggestions, {
-                    duration: 10000,
-                    description: "AI Optimization Suggestions",
-                });
+                toast.info(result.suggestions, { duration: 10000, description: "AI Suggestions" });
             } else {
                 toast.error(result.error || "Failed to optimize");
             }
@@ -218,15 +200,11 @@ export default function EditorPage() {
         }
     };
 
-    const handleImageUpload = async (
-        e: React.ChangeEvent<HTMLInputElement>
-    ) => {
+    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
 
-        const {
-            data: { user },
-        } = await supabase.auth.getUser();
+        const { data: { user } } = await supabase.auth.getUser();
         if (!user) return;
 
         const fileExt = file.name.split(".").pop();
@@ -241,23 +219,16 @@ export default function EditorPage() {
             return;
         }
 
-        const {
-            data: { publicUrl },
-        } = supabase.storage.from("resume-assets").getPublicUrl(filePath);
+        const { data: { publicUrl } } = supabase.storage
+            .from("resume-assets")
+            .getPublicUrl(filePath);
 
         setResumeData({
             ...resumeData,
-            personalInfo: {
-                ...resumeData.personalInfo,
-                profileImage: publicUrl,
-            },
+            personalInfo: { ...resumeData.personalInfo, profileImage: publicUrl },
         });
 
-        await supabase.from("images").insert({
-            user_id: user.id,
-            image_url: publicUrl,
-        });
-
+        await supabase.from("images").insert({ user_id: user.id, image_url: publicUrl });
         toast.success("Image uploaded!");
     };
 
@@ -277,70 +248,57 @@ export default function EditorPage() {
 
         if (error) {
             toast.error("Failed to update sharing");
+        } else if (!current.is_public && current.public_slug) {
+            navigator.clipboard.writeText(
+                `${window.location.origin}/share/${current.public_slug}`
+            );
+            toast.success("Resume is now public! Link copied.");
         } else {
-            if (!current.is_public && current.public_slug) {
-                navigator.clipboard.writeText(
-                    `${window.location.origin}/share/${current.public_slug}`
-                );
-                toast.success("Resume is now public! Link copied.");
-            } else {
-                toast.success("Resume is now private.");
-            }
+            toast.success("Resume is now private.");
         }
     };
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center">
-                <Loader2 className="w-8 h-8 animate-spin text-violet-500" />
+            <div className="min-h-screen bg-[#060918] flex items-center justify-center">
+                <Loader2 className="w-8 h-8 animate-spin text-emerald-500" />
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen flex flex-col bg-[#0a0a0f]">
+        <div className="min-h-screen flex flex-col bg-[#060918]">
             {/* Toolbar */}
-            <header className="sticky top-0 z-50 border-b border-white/5 bg-[#0a0a0f]/90 backdrop-blur-xl px-4 h-14 flex items-center justify-between gap-4 no-print">
+            <header className="sticky top-0 z-50 border-b border-white/5 glass px-4 h-14 flex items-center justify-between gap-4 no-print">
                 <div className="flex items-center gap-3">
                     <Link href="/dashboard">
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            className="h-8 w-8 text-gray-400 hover:text-white hover:bg-white/5"
-                        >
+                        <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-500 hover:text-white hover:bg-white/5 rounded-lg">
                             <ArrowLeft className="w-4 h-4" />
                         </Button>
                     </Link>
                     <div className="flex items-center gap-2">
-                        <FileText className="w-4 h-4 text-violet-400" />
+                        <FileText className="w-4 h-4 text-emerald-400" />
                         <input
                             value={title}
                             onChange={(e) => saveTitle(e.target.value)}
-                            className="bg-transparent border-none text-sm font-medium text-white focus:outline-none focus:ring-0 w-48"
+                            className="bg-transparent border-none text-sm font-medium text-slate-100 focus:outline-none w-48 placeholder:text-slate-600"
                         />
                     </div>
-                    <div className="flex items-center gap-1.5 text-xs text-gray-500">
+                    <div className="flex items-center gap-1.5 text-xs text-slate-600">
                         {saving ? (
-                            <>
-                                <Loader2 className="w-3 h-3 animate-spin" /> Saving...
-                            </>
+                            <><Loader2 className="w-3 h-3 animate-spin" /> Saving...</>
                         ) : (
-                            <>
-                                <Check className="w-3 h-3 text-green-500" /> Saved
-                            </>
+                            <><Check className="w-3 h-3 text-emerald-500" /> Saved</>
                         )}
                     </div>
                 </div>
 
                 <div className="flex items-center gap-2">
-                    <Select
-                        value={template}
-                        onValueChange={(v) => setTemplate(v as ResumeTemplate)}
-                    >
-                        <SelectTrigger className="w-40 h-8 text-xs bg-white/5 border-white/10 text-gray-300">
+                    <Select value={template} onValueChange={(v) => setTemplate(v as ResumeTemplate)}>
+                        <SelectTrigger className="w-36 h-8 text-xs bg-white/5 border-white/10 text-slate-300 rounded-lg">
                             <SelectValue />
                         </SelectTrigger>
-                        <SelectContent className="bg-[#1a1a2e] border-white/10 text-gray-300">
+                        <SelectContent className="glass border-white/10 text-slate-300">
                             <SelectItem value="modern">Modern Clean</SelectItem>
                             <SelectItem value="classic">Executive</SelectItem>
                             <SelectItem value="minimal">Minimal</SelectItem>
@@ -348,81 +306,43 @@ export default function EditorPage() {
                         </SelectContent>
                     </Select>
 
-                    <input
-                        type="file"
-                        ref={fileInputRef}
-                        onChange={handleImageUpload}
-                        accept="image/*"
-                        className="hidden"
-                    />
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        className="h-8 text-xs gap-1 border-white/10 text-gray-300 hover:text-white hover:bg-white/5"
-                        onClick={() => fileInputRef.current?.click()}
-                    >
+                    <input type="file" ref={fileInputRef} onChange={handleImageUpload} accept="image/*" className="hidden" />
+
+                    <Button variant="outline" size="sm" onClick={() => fileInputRef.current?.click()}
+                        className="h-8 text-xs gap-1 border-white/10 text-slate-400 hover:text-white hover:bg-white/5 rounded-lg">
                         <Upload className="w-3 h-3" /> Photo
                     </Button>
 
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        className="h-8 text-xs gap-1 border-white/10 text-gray-300 hover:text-white hover:bg-white/5"
-                        onClick={optimizeResume}
-                        disabled={optimizing}
-                    >
-                        {optimizing ? (
-                            <Loader2 className="w-3 h-3 animate-spin" />
-                        ) : (
-                            <Sparkles className="w-3 h-3 text-violet-400" />
-                        )}
+                    <Button variant="outline" size="sm" onClick={optimizeResume} disabled={optimizing}
+                        className="h-8 text-xs gap-1 border-white/10 text-slate-400 hover:text-white hover:bg-white/5 rounded-lg">
+                        {optimizing ? <Loader2 className="w-3 h-3 animate-spin" /> : <Sparkles className="w-3 h-3 text-emerald-400" />}
                         AI Optimize
                     </Button>
 
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        className="h-8 text-xs gap-1 border-white/10 text-gray-300 hover:text-white hover:bg-white/5"
-                        onClick={togglePublic}
-                    >
+                    <Button variant="outline" size="sm" onClick={togglePublic}
+                        className="h-8 text-xs gap-1 border-white/10 text-slate-400 hover:text-white hover:bg-white/5 rounded-lg">
                         <Share2 className="w-3 h-3" /> Share
                     </Button>
 
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        className="h-8 text-xs gap-1 border-white/10 text-gray-300 hover:text-white hover:bg-white/5"
-                        onClick={manualSave}
-                        disabled={saving}
-                    >
-                        <Save className="w-3 h-3" /> Save Draft
+                    <Button variant="outline" size="sm" onClick={manualSave} disabled={saving}
+                        className="h-8 text-xs gap-1 border-white/10 text-slate-400 hover:text-white hover:bg-white/5 rounded-lg">
+                        <Save className="w-3 h-3" /> Save
                     </Button>
 
-                    <Button
-                        size="sm"
-                        className="h-8 text-xs gap-1 bg-gradient-to-r from-violet-600 to-blue-600 hover:from-violet-500 hover:to-blue-500 text-white border-0"
-                        onClick={exportPDF}
-                        disabled={exporting}
-                    >
-                        {exporting ? (
-                            <Loader2 className="w-3 h-3 animate-spin" />
-                        ) : (
-                            <Download className="w-3 h-3" />
-                        )}
-                        Download PDF
+                    <Button size="sm" onClick={exportPDF} disabled={exporting}
+                        className="h-8 text-xs gap-1 bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-white border-0 rounded-lg">
+                        {exporting ? <Loader2 className="w-3 h-3 animate-spin" /> : <Download className="w-3 h-3" />}
+                        PDF
                     </Button>
                 </div>
             </header>
 
             {/* Editor Layout */}
             <div className="flex-1 flex overflow-hidden">
-                {/* Left Panel - Form */}
-                <div className="w-[480px] border-r border-white/5 bg-[#0e0e16] overflow-y-auto">
+                <div className="w-[480px] border-r border-white/5 bg-[#0a0f1e] overflow-y-auto">
                     <ResumeForm data={resumeData} onChange={setResumeData} />
                 </div>
-
-                {/* Right Panel - Preview */}
-                <div className="flex-1 overflow-auto bg-[#12121a] p-8 flex justify-center">
+                <div className="flex-1 overflow-auto bg-[#080d1a] p-8 flex justify-center">
                     <div className="transform scale-[0.65] origin-top">
                         <ResumePreview data={resumeData} template={template} />
                     </div>
