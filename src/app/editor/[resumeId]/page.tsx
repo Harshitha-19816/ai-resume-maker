@@ -32,6 +32,8 @@ import {
     Save,
 } from "lucide-react";
 import { toast } from "sonner";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 
 export default function EditorPage() {
     const params = useParams();
@@ -120,60 +122,51 @@ export default function EditorPage() {
                 return;
             }
 
-            const printWindow = window.open("", "_blank");
-            if (!printWindow) {
-                toast.error("Please allow pop-ups to export PDF");
-                setExporting(false);
-                return;
-            }
+            // Clone the element and render at full scale in a hidden container
+            const clone = element.cloneNode(true) as HTMLElement;
+            clone.style.transform = "none";
+            clone.style.width = "794px"; // A4 width at 96dpi
+            clone.style.minHeight = "1123px"; // A4 height at 96dpi
+            clone.style.position = "absolute";
+            clone.style.top = "-9999px";
+            clone.style.left = "-9999px";
+            clone.style.background = "white";
+            document.body.appendChild(clone);
 
-            const stylesheets = Array.from(document.styleSheets)
-                .map((sheet) => {
-                    try {
-                        return Array.from(sheet.cssRules)
-                            .map((rule) => rule.cssText)
-                            .join("\n");
-                    } catch {
-                        return "";
-                    }
-                })
-                .join("\n");
+            // Wait for fonts/images to settle
+            await new Promise((resolve) => setTimeout(resolve, 500));
 
-            printWindow.document.write(`
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <title>${title || "Resume"}</title>
-                    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-                    <style>
-                        ${stylesheets}
-                        * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-                        @page { size: A4; margin: 0; }
-                        body { margin: 0; padding: 0; background: white; }
-                        #print-resume { width: 210mm; min-height: 297mm; margin: 0 auto; }
-                    </style>
-                </head>
-                <body>
-                    <div id="print-resume">${element.outerHTML}</div>
-                </body>
-                </html>
-            `);
-            printWindow.document.close();
+            const canvas = await html2canvas(clone, {
+                scale: 2,
+                useCORS: true,
+                allowTaint: true,
+                backgroundColor: "#ffffff",
+                logging: false,
+                width: 794,
+                height: Math.max(clone.scrollHeight, 1123),
+                windowWidth: 794,
+                windowHeight: 1123,
+            });
 
-            printWindow.onload = () => {
-                setTimeout(() => {
-                    printWindow.print();
-                    printWindow.close();
-                }, 500);
-            };
+            document.body.removeChild(clone);
 
-            setTimeout(() => {
-                try { printWindow.print(); printWindow.close(); } catch { /* */ }
-            }, 2000);
+            const imgData = canvas.toDataURL("image/png");
+            const pdf = new jsPDF({
+                orientation: "portrait",
+                unit: "mm",
+                format: "a4",
+            });
 
-            toast.success("Print dialog opened! Select 'Save as PDF'.");
-        } catch {
-            toast.error("Failed to export PDF");
+            const pdfWidth = 210;
+            const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+            pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+            pdf.save(`${title || "Resume"}.pdf`);
+
+            toast.success("PDF downloaded!");
+        } catch (err) {
+            console.error("PDF export error:", err);
+            toast.error("Failed to export PDF. Please try again.");
         } finally {
             setExporting(false);
         }
