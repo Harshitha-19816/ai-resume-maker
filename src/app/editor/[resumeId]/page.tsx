@@ -122,19 +122,34 @@ export default function EditorPage() {
                 return;
             }
 
-            // Clone the element and render at full scale in a hidden container
+            // Create a wrapper to hold the clone at full scale
+            const wrapper = document.createElement("div");
+            wrapper.style.position = "fixed";
+            wrapper.style.top = "-10000px";
+            wrapper.style.left = "-10000px";
+            wrapper.style.width = "794px";
+            wrapper.style.zIndex = "-1";
+            wrapper.style.overflow = "visible";
+            wrapper.style.background = "white";
+
+            // Clone the resume preview
             const clone = element.cloneNode(true) as HTMLElement;
             clone.style.transform = "none";
-            clone.style.width = "794px"; // A4 width at 96dpi
-            clone.style.minHeight = "1123px"; // A4 height at 96dpi
-            clone.style.position = "absolute";
-            clone.style.top = "-9999px";
-            clone.style.left = "-9999px";
+            clone.style.width = "794px";
+            clone.style.minHeight = "1123px";
             clone.style.background = "white";
-            document.body.appendChild(clone);
+            clone.style.margin = "0";
+            clone.style.padding = clone.style.padding || "0";
 
-            // Wait for fonts/images to settle
-            await new Promise((resolve) => setTimeout(resolve, 500));
+            // Remove all SVG elements (html2canvas can't render them reliably)
+            const svgs = clone.querySelectorAll("svg");
+            svgs.forEach((svg) => svg.remove());
+
+            wrapper.appendChild(clone);
+            document.body.appendChild(wrapper);
+
+            // Wait for layout to stabilize
+            await new Promise((r) => setTimeout(r, 300));
 
             const canvas = await html2canvas(clone, {
                 scale: 2,
@@ -142,13 +157,11 @@ export default function EditorPage() {
                 allowTaint: true,
                 backgroundColor: "#ffffff",
                 logging: false,
-                width: 794,
-                height: Math.max(clone.scrollHeight, 1123),
-                windowWidth: 794,
-                windowHeight: 1123,
+                foreignObjectRendering: false,
+                removeContainer: false,
             });
 
-            document.body.removeChild(clone);
+            document.body.removeChild(wrapper);
 
             const imgData = canvas.toDataURL("image/png");
             const pdf = new jsPDF({
@@ -160,12 +173,25 @@ export default function EditorPage() {
             const pdfWidth = 210;
             const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
 
-            pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-            pdf.save(`${title || "Resume"}.pdf`);
+            // Handle multi-page if content is longer than A4
+            if (pdfHeight > 297) {
+                const pageHeight = 297;
+                let position = 0;
+                const totalPages = Math.ceil(pdfHeight / pageHeight);
 
+                for (let i = 0; i < totalPages; i++) {
+                    if (i > 0) pdf.addPage();
+                    pdf.addImage(imgData, "PNG", 0, -position, pdfWidth, pdfHeight);
+                    position += pageHeight;
+                }
+            } else {
+                pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+            }
+
+            pdf.save(`${title || "Resume"}.pdf`);
             toast.success("PDF downloaded!");
         } catch (err) {
-            console.error("PDF export error:", err);
+            console.error("PDF export failed:", err);
             toast.error("Failed to export PDF. Please try again.");
         } finally {
             setExporting(false);
