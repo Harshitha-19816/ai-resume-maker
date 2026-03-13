@@ -135,3 +135,59 @@ CREATE POLICY "Users can delete own assets" ON storage.objects
 
 CREATE POLICY "Public assets are viewable" ON storage.objects
   FOR SELECT USING (bucket_id = 'resume-assets');
+
+-- Notes App table
+CREATE TABLE public.notes (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  user_id UUID REFERENCES auth.users ON DELETE CASCADE NOT NULL,
+  title TEXT NOT NULL,
+  content TEXT NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- YouTube Summaries table
+CREATE TABLE public.youtube_summaries (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  user_id UUID REFERENCES auth.users ON DELETE CASCADE NOT NULL,
+  video_url TEXT NOT NULL,
+  summary TEXT NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Jobs Search History table
+CREATE TABLE public.jobs_search_history (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  user_id UUID REFERENCES auth.users ON DELETE CASCADE NOT NULL,
+  role TEXT NOT NULL,
+  location TEXT,
+  results JSONB NOT NULL DEFAULT '[]'::jsonb,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Enable RLS
+ALTER TABLE public.notes ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.youtube_summaries ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.jobs_search_history ENABLE ROW LEVEL SECURITY;
+
+-- Notes Policies
+CREATE POLICY "Users can view own notes" ON public.notes FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY "Users can insert own notes" ON public.notes FOR INSERT WITH CHECK (auth.uid() = user_id);
+CREATE POLICY "Users can update own notes" ON public.notes FOR UPDATE USING (auth.uid() = user_id);
+CREATE POLICY "Users can delete own notes" ON public.notes FOR DELETE USING (auth.uid() = user_id);
+
+-- YouTube Summaries Policies
+CREATE POLICY "Users can view own youtube summaries" ON public.youtube_summaries FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY "Users can insert own youtube summaries" ON public.youtube_summaries FOR INSERT WITH CHECK (auth.uid() = user_id);
+CREATE POLICY "Users can delete own youtube summaries" ON public.youtube_summaries FOR DELETE USING (auth.uid() = user_id);
+
+-- Jobs Search History Policies
+CREATE POLICY "Users can view own jobs search history" ON public.jobs_search_history FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY "Users can insert own jobs search history" ON public.jobs_search_history FOR INSERT WITH CHECK (auth.uid() = user_id);
+CREATE POLICY "Users can delete own jobs search history" ON public.jobs_search_history FOR DELETE USING (auth.uid() = user_id);
+
+-- Add to Trigger for updating notes
+CREATE TRIGGER notes_updated_at
+  BEFORE UPDATE ON public.notes
+  FOR EACH ROW
+  EXECUTE FUNCTION update_updated_at();

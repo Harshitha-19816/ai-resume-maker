@@ -1,0 +1,88 @@
+# AI Resume Maker Feature Extensions
+
+This plan details the steps to implement Google Authentication, Notes Saver App, AI YouTube Summarizer, AI Job Search, Dashboard Sidebar updates, and Supabase Schema updates.
+
+## User Review Required
+
+> [!IMPORTANT]
+> Please review the proposed changes below. Once approved, I will begin execution.
+> 
+> Also, note that for features like Firecrawl, OpenRouter/Groq, and Google Auth, you will need to ensure the environment variables are set in [.env.local](file:///c:/Users/harsh/OneDrive/Desktop/AI_RESUME_MAKER/.env.local):
+> - `NEXT_PUBLIC_SUPABASE_URL`
+> - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+> - `GROQ_API_KEY` (or `OPENROUTER_API_KEY`)
+> - `FIRECRAWL_API_KEY`
+
+## Proposed Changes
+
+### Supabase Database
+Summary: Add new tables and RLS policies for notes, youtube_summaries, and jobs_search_history.
+#### [MODIFY] [supabase-schema.sql](file:///c:/Users/harsh/OneDrive/Desktop/AI_RESUME_MAKER/supabase-schema.sql)
+- Add `notes` table (id, user_id, title, content, created_at)
+- Add `youtube_summaries` table (id, user_id, video_url, summary, created_at)
+- Add `jobs_search_history` table (id, user_id, role, location, results, created_at)
+- Add Row Level Security (RLS) policies for user isolation.
+
+---
+
+### Authentication (Google OAuth)
+Summary: Add Google OAuth login/signup buttons and update the Navbar.
+#### [MODIFY] [login/page.tsx](file:///c:/Users/harsh/OneDrive/Desktop/AI_RESUME_MAKER/src/app/(auth)/login/page.tsx)
+- Add "Continue with Google" button calling `supabase.auth.signInWithOAuth({ provider: 'google' })`.
+#### [MODIFY] [signup/page.tsx](file:///c:/Users/harsh/OneDrive/Desktop/AI_RESUME_MAKER/src/app/(auth)/signup/page.tsx)
+- Add "Continue with Google" button.
+#### [MODIFY] [navbar.tsx](file:///c:/Users/harsh/OneDrive/Desktop/AI_RESUME_MAKER/src/components/shared/navbar.tsx)
+- Fetch session in Navbar to conditionally render User Avatar/Dropdown instead of "Sign In" / "Get Started".
+
+---
+
+### Dashboard Sidebar
+Summary: Add navigation links for the new tools using shadcn UI and Tailwind.
+#### [MODIFY] [dashboard/page.tsx](file:///c:/Users/harsh/OneDrive/Desktop/AI_RESUME_MAKER/src/app/dashboard/page.tsx)
+- Add sidebar links: Notes Saver (`/notes`), YouTube Summarizer (`/youtube-summary`), AI Job Search (`/ai-job-search`), and Profile (`/profile`). 
+
+---
+
+### Notes Saver App
+Summary: Implement CRUD for user notes.
+#### [NEW] [src/app/notes/page.tsx](file:///c:/Users/harsh/OneDrive/Desktop/AI_RESUME_MAKER/src/app/notes/page.tsx)
+- Build a UI to list, create, edit, and delete notes, integrated with Supabase.
+
+---
+
+### AI YouTube Summarizer
+Summary: Build a page that takes a YouTube URL, gets the transcript (using an API), and uses Groq/OpenRouter to generate a summary.
+#### [NEW] [src/app/youtube-summary/page.tsx](file:///c:/Users/harsh/OneDrive/Desktop/AI_RESUME_MAKER/src/app/youtube-summary/page.tsx)
+- UI for URL input and structured summary output.
+#### [NEW] [src/app/api/youtube/route.ts](file:///c:/Users/harsh/OneDrive/Desktop/AI_RESUME_MAKER/src/app/api/youtube/route.ts)
+- Backend endpoint to fetch transcripts and call the LLM API.
+
+---
+
+### AI Job Search (Firecrawl)
+Summary: Build a page to accept a job role, search via Firecrawl, summarize via LLM, and display results.
+#### [NEW] [src/app/ai-job-search/page.tsx](file:///c:/Users/harsh/OneDrive/Desktop/AI_RESUME_MAKER/src/app/ai-job-search/page.tsx)
+- UI for job role input and summarized results mapping.
+#### [NEW] [src/app/api/job-search/route.ts](file:///c:/Users/harsh/OneDrive/Desktop/AI_RESUME_MAKER/src/app/api/job-search/route.ts)
+- Backend endpoint calling Firecrawl API and LLM summarization.
+
+---
+
+### Agent Workflows
+Summary: Document step-by-step workflow of the integration.
+#### [NEW] [.agents/workflows/ai_features_workflow.md](file:///c:/Users/harsh/OneDrive/Desktop/AI_RESUME_MAKER/.agents/workflows/ai_features_workflow.md)
+- Step-by-step instructions on running the AI Resume Maker feature workflows.
+
+## Verification Plan
+
+### Automated Tests
+- Validate TypeScript build with `npm run build` once implementation is complete.
+- Ensure ESLint passes using `npm run lint`.
+
+### Manual Verification
+1. I will deploy the Supabase schema changes using standard Supabase dashboard queries (the user needs to do this on their end with the provided SQL).
+2. Start the local server via `npm run dev`.
+3. Verify that the user can login with Google.
+4. Go to `/notes` and ensure creating/deleting a note works and persists.
+5. Go to `/youtube-summary`, paste a video, and test AI summary output.
+6. Go to `/ai-job-search`, enter "Software Engineer", and check the Firecrawl + LLM result.

@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
+import { Sidebar } from "@/components/shared/sidebar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -31,9 +32,6 @@ import {
     Eye,
     EyeOff,
     Sparkles,
-    LayoutDashboard,
-    Palette,
-    Settings,
     Clock,
     Globe,
 } from "lucide-react";
@@ -49,11 +47,6 @@ interface Resume {
     is_public: boolean;
     public_slug: string;
 }
-
-const SIDEBAR_LINKS = [
-    { icon: LayoutDashboard, label: "Dashboard", href: "/dashboard", active: true },
-    { icon: Palette, label: "Templates", href: "/templates", active: false },
-];
 
 export default function DashboardPage() {
     const [resumes, setResumes] = useState<Resume[]>([]);
@@ -208,46 +201,7 @@ export default function DashboardPage() {
 
     return (
         <div className="min-h-screen bg-[#060918] flex">
-            {/* Sidebar */}
-            <aside className="hidden md:flex w-64 flex-col glass border-r border-white/5 p-5 shrink-0">
-                <Link href="/" className="flex items-center gap-2 mb-10">
-                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-500 to-cyan-500 flex items-center justify-center">
-                        <FileText className="w-4 h-4 text-white" />
-                    </div>
-                    <span className="font-bold text-slate-100">
-                        AI Resume <span className="text-emerald-400">Studio</span>
-                    </span>
-                </Link>
-
-                <nav className="flex-1 space-y-1">
-                    {SIDEBAR_LINKS.map((link) => {
-                        const Icon = link.icon;
-                        return (
-                            <Link
-                                key={link.href}
-                                href={link.href}
-                                className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors ${link.active
-                                    ? "bg-emerald-500/10 text-emerald-400"
-                                    : "text-slate-500 hover:text-slate-300 hover:bg-white/5"
-                                    }`}
-                            >
-                                <Icon className="w-4 h-4" />
-                                {link.label}
-                            </Link>
-                        );
-                    })}
-                </nav>
-
-                <div className="border-t border-white/5 pt-4 mt-4">
-                    <button
-                        onClick={handleLogout}
-                        className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-slate-500 hover:text-red-400 hover:bg-red-500/5 w-full transition-colors"
-                    >
-                        <LogOut className="w-4 h-4" />
-                        Sign Out
-                    </button>
-                </div>
-            </aside>
+            <Sidebar />
 
             {/* Main Content */}
             <main className="flex-1 overflow-auto">
