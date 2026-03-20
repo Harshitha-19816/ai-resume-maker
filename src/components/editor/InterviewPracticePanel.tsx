@@ -230,7 +230,7 @@ export default function InterviewPracticePanel({
     };
 
     return (
-        <div className="w-[210mm] mx-auto mt-12 bg-[#0a0f1e] border border-white/5 rounded-3xl p-8 shadow-2xl relative overflow-hidden">
+        <div className="w-full max-w-[210mm] mx-auto mt-12 bg-[#0a0f1e] border border-white/5 rounded-3xl p-4 md:p-8 shadow-2xl relative overflow-hidden">
             <div className="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
             <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
             

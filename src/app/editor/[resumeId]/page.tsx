@@ -278,8 +278,8 @@ export default function EditorPage() {
     return (
         <div className="min-h-screen flex flex-col bg-[#060918]">
             {/* Toolbar */}
-            <header className="sticky top-0 z-50 border-b border-white/5 glass px-4 h-14 flex items-center justify-between gap-4 no-print">
-                <div className="flex items-center gap-3">
+            <header className="sticky top-0 z-50 border-b border-white/5 glass px-4 h-14 flex items-center justify-between gap-4 no-print overflow-x-auto whitespace-nowrap scrollbar-hide">
+                <div className="flex items-center gap-3 shrink-0">
                     <Link href="/dashboard">
                         <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-500 hover:text-white hover:bg-white/5 rounded-lg">
                             <ArrowLeft className="w-4 h-4" />
@@ -347,12 +347,12 @@ export default function EditorPage() {
             </header>
 
             {/* Editor Layout */}
-            <div className="flex-1 flex overflow-hidden">
-                <div className="w-[480px] border-r border-white/5 bg-[#0a0f1e] overflow-y-auto">
+            <div className="flex-1 flex flex-col md:flex-row overflow-hidden">
+                <div className="w-full md:w-[480px] h-[50vh] md:h-auto border-b md:border-b-0 md:border-r border-white/5 bg-[#0a0f1e] overflow-y-auto shrink-0">
                     <ResumeForm data={resumeData} onChange={setResumeData} />
                 </div>
-                <div className="flex-1 overflow-auto bg-[#080d1a] p-8 flex flex-col items-center gap-12">
-                    <div className="transform scale-[0.65] origin-top">
+                <div className="flex-1 overflow-auto bg-[#080d1a] p-4 md:p-8 flex flex-col items-center gap-12">
+                    <div className="transform scale-[0.45] md:scale-[0.65] origin-top">
                         <ResumePreview data={resumeData} template={template} />
                     </div>
                     
