@@ -2,15 +2,12 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FileText, LayoutDashboard, Palette, LogOut, BookOpen, Youtube, Search, UserCircle } from "lucide-react";
+import { FileText, LayoutDashboard, Palette, LogOut, UserCircle } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 
 const SIDEBAR_LINKS = [
     { icon: LayoutDashboard, label: "Workspace", href: "/workspace" },
     { icon: FileText, label: "Resume Builder", href: "/dashboard" },
-    { icon: BookOpen, label: "Notes Saver", href: "/tools/notes" },
-    { icon: Youtube, label: "YouTube Summarizer", href: "/tools/youtube" },
-    { icon: Search, label: "AI Job Search", href: "/tools/job-search" },
     { icon: UserCircle, label: "Profile", href: "/profile" },
 ];
 

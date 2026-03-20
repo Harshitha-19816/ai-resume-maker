@@ -7,9 +7,6 @@ import Link from "next/link";
 import { 
     LayoutDashboard, 
     FileText, 
-    BookOpen, 
-    Youtube, 
-    Search, 
     ArrowRight, 
     Sparkles,
     Zap,
@@ -27,31 +24,6 @@ const TOOLS = [
         color: "bg-emerald-500/10",
         iconColor: "text-emerald-400",
         badge: "Popular"
-    },
-    {
-        title: "Notes Saver",
-        description: "Quickly save and organize your career notes, links, and interview prep.",
-        icon: BookOpen,
-        href: "/tools/notes",
-        color: "bg-blue-500/10",
-        iconColor: "text-blue-400"
-    },
-    {
-        title: "YouTube Summarizer",
-        description: "Extract key insights and detailed summaries from any YouTube video.",
-        icon: Youtube,
-        href: "/tools/youtube",
-        color: "bg-red-500/10",
-        iconColor: "text-red-400"
-    },
-    {
-        title: "AI Job Search",
-        description: "Scan the web for the latest job postings matching your specific role.",
-        icon: Search,
-        href: "/tools/job-search",
-        color: "bg-purple-500/10",
-        iconColor: "text-purple-400",
-        badge: "New"
     }
 ];
 
@@ -142,7 +114,7 @@ export default function WorkspacePage() {
                                 <Sparkles className="w-6 h-6 text-cyan-400" />
                             </div>
                             <div>
-                                <div className="text-xl font-bold text-slate-100">4 Pro Tools</div>
+                                <div className="text-xl font-bold text-slate-100">{TOOLS.length} Pro Tool</div>
                                 <div className="text-xs text-slate-500 uppercase tracking-widest">Always Growing</div>
                             </div>
                         </div>
