@@ -16,7 +16,7 @@ export default function ResumePreview({ data, template }: ResumePreviewProps) {
 }
 
 function getThemeStyles(data: ResumeData) {
-    const theme = data.theme || {};
+    const theme = data.theme || ({} as Partial<typeof data.theme & {}>);
     const fontFamily = theme.fontFamily || "font-sans";
     
     // Map text classes to actual CSS sizes to ensure it works in PDF exports well
