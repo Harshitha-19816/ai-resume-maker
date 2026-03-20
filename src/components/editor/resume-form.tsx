@@ -18,8 +18,9 @@ import {
     Briefcase,
     GraduationCap,
     Wrench,
+    Palette,
 } from "lucide-react";
-import { ResumeData, Experience, Education, Project } from "@/types/resume";
+import { ResumeData, Experience, Education, Project, Theme, DEFAULT_RESUME_DATA } from "@/types/resume";
 import { v4 as uuidv4 } from "uuid";
 import { toast } from "sonner";
 
@@ -33,6 +34,7 @@ const STEPS = [
     { id: 2, name: "Experience", icon: Briefcase },
     { id: 3, name: "Education", icon: GraduationCap },
     { id: 4, name: "Skills & Projects", icon: Wrench },
+    { id: 5, name: "Theme", icon: Palette },
 ];
 
 export default function ResumeForm({ data, onChange }: ResumeFormProps) {
@@ -43,6 +45,13 @@ export default function ResumeForm({ data, onChange }: ResumeFormProps) {
         onChange({
             ...data,
             personalInfo: { ...data.personalInfo, [field]: value },
+        });
+    };
+
+    const updateTheme = (field: keyof Theme, value: string | boolean) => {
+        onChange({
+            ...data,
+            theme: { ...(data.theme || DEFAULT_RESUME_DATA.theme!), [field]: value },
         });
     };
 
@@ -583,6 +592,107 @@ export default function ResumeForm({ data, onChange }: ResumeFormProps) {
                                 ))}
                             </div>
                         </section>
+                    </div>
+                );
+            case 5:
+                return (
+                    <div className="space-y-8 animate-in fade-in slide-in-from-right-4 duration-300">
+                        <div className="flex items-center gap-2 text-slate-100 font-bold text-lg mb-6">
+                            <Palette className="w-5 h-5 text-emerald-400" />
+                            Theme & Formatting
+                        </div>
+                        <div className="glass-card p-6 rounded-2xl space-y-6">
+                            <div className="space-y-3">
+                                <Label className={labelClass}>Font Family</Label>
+                                <div className="grid grid-cols-3 gap-3">
+                                    {[
+                                        { label: "Sans", value: "font-sans" },
+                                        { label: "Serif", value: "font-serif" },
+                                        { label: "Mono", value: "font-mono" },
+                                    ].map((font) => (
+                                        <button
+                                            key={font.value}
+                                            onClick={() => updateTheme("fontFamily", font.value)}
+                                            className={`h-10 rounded-xl text-sm font-medium border transition-colors ${
+                                                (data.theme?.fontFamily || "font-sans") === font.value
+                                                    ? "bg-emerald-500/10 border-emerald-500/50 text-emerald-400"
+                                                    : "bg-white/5 border-white/10 text-slate-400 hover:text-white"
+                                            }`}
+                                        >
+                                            {font.label}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                            
+                            <div className="space-y-3">
+                                <Label className={labelClass}>Base Font Size</Label>
+                                <div className="grid grid-cols-3 gap-3">
+                                    {[
+                                        { label: "Small", value: "text-xs" },
+                                        { label: "Medium", value: "text-sm" },
+                                        { label: "Large", value: "text-base" },
+                                    ].map((size) => (
+                                        <button
+                                            key={size.value}
+                                            onClick={() => updateTheme("fontSize", size.value)}
+                                            className={`h-10 rounded-xl text-sm font-medium border transition-colors ${
+                                                (data.theme?.fontSize || "text-sm") === size.value
+                                                    ? "bg-emerald-500/10 border-emerald-500/50 text-emerald-400"
+                                                    : "bg-white/5 border-white/10 text-slate-400 hover:text-white"
+                                            }`}
+                                        >
+                                            {size.label}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <Separator className="bg-white/5" />
+
+                            <div className="space-y-3">
+                                <Label className={labelClass}>Bullet Point Style</Label>
+                                <div className="grid grid-cols-4 gap-3">
+                                    {[
+                                        { label: "Disc", value: "disc" },
+                                        { label: "Circle", value: "circle" },
+                                        { label: "Square", value: "square" },
+                                        { label: "None", value: "none" },
+                                    ].map((style) => (
+                                        <button
+                                            key={style.value}
+                                            onClick={() => updateTheme("bulletStyle", style.value as any)}
+                                            className={`h-10 rounded-xl text-sm font-medium border transition-colors ${
+                                                (data.theme?.bulletStyle || "disc") === style.value
+                                                    ? "bg-emerald-500/10 border-emerald-500/50 text-emerald-400"
+                                                    : "bg-white/5 border-white/10 text-slate-400 hover:text-white"
+                                            }`}
+                                        >
+                                            {style.label}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <Separator className="bg-white/5" />
+
+                            <div className="flex items-center justify-between">
+                                <div>
+                                    <Label className="text-slate-200 block mb-1">Bold Section Headings</Label>
+                                    <span className="text-xs text-slate-500">Enable bold text for block headers</span>
+                                </div>
+                                <button
+                                    onClick={() => updateTheme("headingBold", !(data.theme?.headingBold ?? true))}
+                                    className={`w-12 h-6 rounded-full transition-colors relative ${
+                                        (data.theme?.headingBold ?? true) ? "bg-emerald-500" : "bg-white/10"
+                                    }`}
+                                >
+                                    <div className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform ${
+                                        (data.theme?.headingBold ?? true) ? "translate-x-6" : "translate-x-0"
+                                    }`} />
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 );
             default:

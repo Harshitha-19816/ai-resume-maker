@@ -17,6 +17,7 @@ import {
 const NAV_LINKS = [
     { href: "/", label: "Home" },
     { href: "/templates", label: "Templates" },
+    { href: "/workspace", label: "Workspace" },
     { href: "/dashboard", label: "My Resumes" },
 ];
 
@@ -70,7 +71,7 @@ export default function Navbar() {
                     <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-500 to-cyan-500 flex items-center justify-center shadow-md shadow-emerald-500/20 group-hover:shadow-emerald-500/40 transition-shadow">
                         <FileText className="w-4 h-4 text-white" />
                     </div>
-                    <span className="font-bold text-lg text-slate-100 tracking-tight">
+                    <span className="font-bold text-lg text-slate-100 tracking-tight uppercase">
                         AI Resume <span className="text-emerald-400">Studio</span>
                     </span>
                 </Link>
@@ -100,13 +101,13 @@ export default function Navbar() {
                 <div className="hidden md:flex items-center gap-3">
                     {user ? (
                         <>
-                            <Link href="/dashboard">
+                            <Link href="/workspace">
                                 <Button
                                     variant="ghost"
                                     size="sm"
                                     className="text-sm font-medium px-4 h-9 rounded-xl transition-all text-slate-400 hover:text-slate-100 hover:bg-white/5"
                                 >
-                                    Dashboard
+                                    Workspace
                                 </Button>
                             </Link>
                             <DropdownMenu>
@@ -117,8 +118,11 @@ export default function Navbar() {
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="end" className="glass border-white/10 text-slate-300 w-48 mt-2 rounded-xl">
                                     <div className="px-2 py-2 text-xs text-slate-500 truncate mb-1 border-b border-white/5">{user.email}</div>
-                                    <DropdownMenuItem onClick={() => window.location.href = '/dashboard'} className="gap-2 hover:bg-white/5 cursor-pointer rounded-lg mx-1 mt-1">
-                                        <LayoutDashboard className="w-4 h-4" /> Dashboard
+                                    <DropdownMenuItem onClick={() => window.location.href = '/workspace'} className="gap-2 hover:bg-white/5 cursor-pointer rounded-lg mx-1 mt-1">
+                                        <LayoutDashboard className="w-4 h-4" /> Workspace
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem onClick={() => window.location.href = '/dashboard'} className="gap-2 hover:bg-white/5 cursor-pointer rounded-lg mx-1">
+                                        <FileText className="w-4 h-4" /> Resumes
                                     </DropdownMenuItem>
                                     <DropdownMenuItem onClick={handleLogout} className="gap-2 text-red-400 hover:bg-red-500/10 focus:text-red-400 cursor-pointer rounded-lg mx-1 mb-1">
                                         <LogOut className="w-4 h-4" /> Sign Out

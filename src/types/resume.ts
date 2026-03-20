@@ -42,12 +42,21 @@ export interface Project {
   endDate?: string;
 }
 
+export interface Theme {
+  fontFamily: string;
+  fontSize: string;
+  primaryColor: string;
+  headingBold: boolean;
+  bulletStyle: "disc" | "circle" | "square" | "none";
+}
+
 export interface ResumeData {
   personalInfo: PersonalInfo;
   experience: Experience[];
   education: Education[];
   skills: string[];
   projects: Project[];
+  theme?: Theme;
 }
 
 export interface Resume {
@@ -79,4 +88,11 @@ export const DEFAULT_RESUME_DATA: ResumeData = {
   education: [],
   skills: [],
   projects: [],
+  theme: {
+    fontFamily: "font-sans",
+    fontSize: "text-sm",
+    primaryColor: "#10b981",
+    headingBold: true,
+    bulletStyle: "disc",
+  },
 };

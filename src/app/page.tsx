@@ -90,22 +90,22 @@ export default function HomePage() {
           {/* Badge */}
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass mb-8 animate-fade-up opacity-0">
             <Sparkles className="w-4 h-4 text-emerald-400" />
-            <span className="text-sm text-slate-300 font-medium">AI-Powered Resume Builder</span>
+            <span className="text-sm text-slate-300 font-medium">Ultimate AI Career Workspace</span>
           </div>
 
           {/* Headline */}
           <h1 className="text-5xl md:text-7xl font-bold tracking-tight leading-[1.1] mb-6 animate-fade-up opacity-0 delay-100">
-            <span className="text-slate-100">Build Resumes That</span>
+            <span className="text-slate-100">All Your Professional</span>
             <br />
             <span className="bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-400 bg-clip-text text-transparent animate-gradient">
-              Land Interviews
+              AI Tools in One Place
             </span>
           </h1>
 
           {/* Subtitle */}
           <p className="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto mb-10 leading-relaxed animate-fade-up opacity-0 delay-200">
-            Create stunning, ATS-optimized resumes with AI-powered content
-            generation, beautiful templates, and instant PDF export.
+            From ATS-optimized resumes and YouTube video summaries to AI job search and note-taking. 
+            Empower your career with our unified AI workspace.
           </p>
 
           {/* CTAs */}
@@ -232,7 +232,7 @@ export default function HomePage() {
               Ready to Build Your Resume?
             </h2>
             <p className="text-slate-400 mb-8 max-w-md mx-auto">
-              Join thousands of professionals who&apos;ve landed their dream jobs with AI Resume Studio.
+              Join thousands of professionals who&apos;ve upgraded their career with AI Tools Hub.
             </p>
             <Link href="/signup">
               <Button
@@ -256,8 +256,8 @@ export default function HomePage() {
                 <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-emerald-500 to-cyan-500 flex items-center justify-center">
                   <FileText className="w-3.5 h-3.5 text-white" />
                 </div>
-                <span className="font-bold text-slate-200">
-                  AI Resume <span className="text-emerald-400">Studio</span>
+                <span className="font-bold text-slate-200 uppercase tracking-wider">
+                  AI Tools <span className="text-emerald-400">Hub</span>
                 </span>
               </div>
               <p className="text-sm text-slate-500 leading-relaxed">
@@ -289,7 +289,7 @@ export default function HomePage() {
                 Built with Next.js, Supabase & AI
               </p>
               <p className="text-xs text-slate-600 mt-1">
-                © 2026 AI Resume Studio — All rights reserved.
+                © 2026 AI Tools Hub — All rights reserved.
               </p>
             </div>
           </div>

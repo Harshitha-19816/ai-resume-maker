@@ -11,6 +11,7 @@ import {
 } from "@/types/resume";
 import ResumeForm from "@/components/editor/resume-form";
 import ResumePreview from "@/components/resume/resume-preview";
+import InterviewPracticePanel from "@/components/editor/InterviewPracticePanel";
 import { useAutosave } from "@/hooks/use-autosave";
 import { Button } from "@/components/ui/button";
 import {
@@ -350,9 +351,14 @@ export default function EditorPage() {
                 <div className="w-[480px] border-r border-white/5 bg-[#0a0f1e] overflow-y-auto">
                     <ResumeForm data={resumeData} onChange={setResumeData} />
                 </div>
-                <div className="flex-1 overflow-auto bg-[#080d1a] p-8 flex justify-center">
+                <div className="flex-1 overflow-auto bg-[#080d1a] p-8 flex flex-col items-center gap-12">
                     <div className="transform scale-[0.65] origin-top">
                         <ResumePreview data={resumeData} template={template} />
+                    </div>
+                    
+                    {/* AI Interview Questions Generator Section */}
+                    <div className="w-full max-w-[210mm] pb-20">
+                        <InterviewPracticePanel resumeData={resumeData} />
                     </div>
                 </div>
             </div>

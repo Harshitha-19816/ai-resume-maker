@@ -15,15 +15,16 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "AI Resume Studio — Build Resumes That Land Interviews",
+  title: "AI Tools Hub — The Ultimate Career Workspace",
   description:
-    "Create stunning, ATS-optimized resumes with AI-powered content generation, beautiful templates, and one-click PDF export.",
+    "AI-powered professional suite: Resume building, YouTube summarization, automated job search, and smart notes tracking.",
   keywords: [
+    "AI tools",
     "resume builder",
-    "AI resume",
-    "career",
-    "professional resume",
-    "PDF export",
+    "YouTube summarizer",
+    "job search",
+    "notes saver",
+    "career productivity",
     "ATS optimized",
   ],
 };

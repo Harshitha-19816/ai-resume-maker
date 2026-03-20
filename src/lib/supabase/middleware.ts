@@ -36,6 +36,11 @@ export async function updateSession(request: NextRequest) {
     // Redirect unauthenticated users trying to access protected routes
     if (
         !user &&
+        (request.nextUrl.pathname.startsWith("/tools") ||
+            request.nextUrl.pathname.startsWith("/workspace") ||
+            request.nextUrl.pathname.startsWith("/dashboard") ||
+            request.nextUrl.pathname.startsWith("/editor") ||
+            request.nextUrl.pathname.startsWith("/profile")) &&
         !request.nextUrl.pathname.startsWith("/login") &&
         !request.nextUrl.pathname.startsWith("/signup") &&
         !request.nextUrl.pathname.startsWith("/share") &&
@@ -54,7 +59,7 @@ export async function updateSession(request: NextRequest) {
             request.nextUrl.pathname.startsWith("/signup"))
     ) {
         const url = request.nextUrl.clone();
-        url.pathname = "/dashboard";
+        url.pathname = "/workspace";
         return NextResponse.redirect(url);
     }
 

@@ -6,10 +6,11 @@ import { FileText, LayoutDashboard, Palette, LogOut, BookOpen, Youtube, Search, 
 import { createClient } from "@/lib/supabase/client";
 
 const SIDEBAR_LINKS = [
-    { icon: LayoutDashboard, label: "Resume Builder", href: "/dashboard" },
-    { icon: BookOpen, label: "Notes Saver", href: "/notes" },
-    { icon: Youtube, label: "YouTube Summarizer", href: "/youtube-summary" },
-    { icon: Search, label: "AI Job Search", href: "/ai-job-search" },
+    { icon: LayoutDashboard, label: "Workspace", href: "/workspace" },
+    { icon: FileText, label: "Resume Builder", href: "/dashboard" },
+    { icon: BookOpen, label: "Notes Saver", href: "/tools/notes" },
+    { icon: Youtube, label: "YouTube Summarizer", href: "/tools/youtube" },
+    { icon: Search, label: "AI Job Search", href: "/tools/job-search" },
     { icon: UserCircle, label: "Profile", href: "/profile" },
 ];
 
@@ -28,8 +29,8 @@ export function Sidebar() {
                 <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-500 to-cyan-500 flex items-center justify-center">
                     <FileText className="w-4 h-4 text-white" />
                 </div>
-                <span className="font-bold text-slate-100">
-                    AI Resume <span className="text-emerald-400">Studio</span>
+                <span className="font-bold text-slate-100 uppercase tracking-wider">
+                    AI Tools <span className="text-emerald-400">Hub</span>
                 </span>
             </Link>
 
