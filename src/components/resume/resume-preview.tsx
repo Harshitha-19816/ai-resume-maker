@@ -51,11 +51,11 @@ function ModernTemplate({ data }: { data: ResumeData }) {
             className={`bg-white text-gray-900 w-[210mm] min-h-[297mm] mx-auto shadow-2xl ${fontFamilyClass}`}
             style={fontSizeStyle}
         >
-            <div className="bg-gradient-to-r from-emerald-600 to-teal-600 text-white px-8 py-6">
+            <div className="bg-gradient-to-r from-violet-600 to-teal-600 text-white px-8 py-6">
                 <h1 className={`text-2xl tracking-tight ${headingClass}`}>
                     {personalInfo.fullName || "Your Name"}
                 </h1>
-                <div className="flex flex-wrap gap-x-4 gap-y-1 mt-2 text-xs text-emerald-100">
+                <div className="flex flex-wrap gap-x-4 gap-y-1 mt-2 text-xs text-violet-100">
                     {personalInfo.email && <span className="flex items-center gap-1"><Mail className="w-3 h-3" /> {personalInfo.email}</span>}
                     {personalInfo.phone && <span className="flex items-center gap-1"><Phone className="w-3 h-3" /> {personalInfo.phone}</span>}
                     {personalInfo.location && <span className="flex items-center gap-1"><MapPin className="w-3 h-3" /> {personalInfo.location}</span>}
@@ -68,7 +68,7 @@ function ModernTemplate({ data }: { data: ResumeData }) {
             <div className="px-8 py-6 space-y-5">
                 {personalInfo.summary && (
                     <section>
-                        <h2 className={`text-sm text-emerald-600 uppercase tracking-wider border-b border-emerald-200 pb-1 mb-2 ${headingClass}`}>
+                        <h2 className={`text-sm text-violet-600 uppercase tracking-wider border-b border-violet-200 pb-1 mb-2 ${headingClass}`}>
                             Professional Summary
                         </h2>
                         <p className="text-gray-700 leading-relaxed">{personalInfo.summary}</p>
@@ -77,7 +77,7 @@ function ModernTemplate({ data }: { data: ResumeData }) {
 
                 {experience.length > 0 && (
                     <section>
-                        <h2 className={`text-sm text-emerald-600 uppercase tracking-wider border-b border-emerald-200 pb-1 mb-2 ${headingClass}`}>
+                        <h2 className={`text-sm text-violet-600 uppercase tracking-wider border-b border-violet-200 pb-1 mb-2 ${headingClass}`}>
                             Experience
                         </h2>
                         <div className="space-y-3">
@@ -107,7 +107,7 @@ function ModernTemplate({ data }: { data: ResumeData }) {
 
                 {education.length > 0 && (
                     <section>
-                        <h2 className={`text-sm text-emerald-600 uppercase tracking-wider border-b border-emerald-200 pb-1 mb-2 ${headingClass}`}>
+                        <h2 className={`text-sm text-violet-600 uppercase tracking-wider border-b border-violet-200 pb-1 mb-2 ${headingClass}`}>
                             Education
                         </h2>
                         <div className="space-y-2">
@@ -130,12 +130,12 @@ function ModernTemplate({ data }: { data: ResumeData }) {
 
                 {skills.length > 0 && (
                     <section>
-                        <h2 className={`text-sm text-emerald-600 uppercase tracking-wider border-b border-emerald-200 pb-1 mb-2 ${headingClass}`}>
+                        <h2 className={`text-sm text-violet-600 uppercase tracking-wider border-b border-violet-200 pb-1 mb-2 ${headingClass}`}>
                             Skills
                         </h2>
                         <div className="flex flex-wrap gap-1.5">
                             {skills.map((skill, i) => (
-                                <span key={i} className="px-2 py-0.5 bg-emerald-50 text-emerald-700 rounded text-xs font-medium">
+                                <span key={i} className="px-2 py-0.5 bg-violet-50 text-violet-700 rounded text-xs font-medium">
                                     {skill}
                                 </span>
                             ))}
@@ -145,7 +145,7 @@ function ModernTemplate({ data }: { data: ResumeData }) {
 
                 {projects.length > 0 && (
                     <section>
-                        <h2 className={`text-sm text-emerald-600 uppercase tracking-wider border-b border-emerald-200 pb-1 mb-2 ${headingClass}`}>
+                        <h2 className={`text-sm text-violet-600 uppercase tracking-wider border-b border-violet-200 pb-1 mb-2 ${headingClass}`}>
                             Projects
                         </h2>
                         <div className="space-y-2">
@@ -154,7 +154,7 @@ function ModernTemplate({ data }: { data: ResumeData }) {
                                     <div className="flex items-center gap-2">
                                         <h3 className={`text-gray-900 ${headingClass}`}>{project.name}</h3>
                                         {project.link && (
-                                            <a href={project.link} className="text-emerald-600 text-xs hover:underline" target="_blank" rel="noopener noreferrer">↗</a>
+                                            <a href={project.link} className="text-violet-600 text-xs hover:underline" target="_blank" rel="noopener noreferrer">↗</a>
                                         )}
                                     </div>
                                     <p className="text-gray-700">{project.description}</p>

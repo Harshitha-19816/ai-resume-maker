@@ -68,11 +68,11 @@ export default function Navbar() {
             <div className="flex items-center justify-between h-14 px-6">
                 {/* Logo */}
                 <Link href="/" className="flex items-center gap-2.5 group shrink-0">
-                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-500 to-cyan-500 flex items-center justify-center shadow-md shadow-emerald-500/20 group-hover:shadow-emerald-500/40 transition-shadow">
+                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center shadow-md shadow-violet-500/20 group-hover:shadow-violet-500/40 transition-shadow">
                         <FileText className="w-4 h-4 text-white" />
                     </div>
                     <span className="font-bold text-lg text-slate-100 tracking-tight uppercase">
-                        AI Resume <span className="text-emerald-400">Studio</span>
+                        AI Resume <span className="text-violet-400">Studio</span>
                     </span>
                 </Link>
 
@@ -86,7 +86,7 @@ export default function Navbar() {
                                     variant="ghost"
                                     size="sm"
                                     className={`text-sm font-medium px-4 h-9 rounded-xl transition-all ${isActive
-                                        ? "text-emerald-400 bg-emerald-500/10"
+                                        ? "text-violet-400 bg-violet-500/10"
                                         : "text-slate-400 hover:text-slate-100 hover:bg-white/5"
                                         }`}
                                 >
@@ -112,7 +112,7 @@ export default function Navbar() {
                             </Link>
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
-                                    <div className="w-9 h-9 rounded-full bg-gradient-to-br from-emerald-500 to-cyan-500 flex items-center justify-center cursor-pointer shadow-md shadow-emerald-500/20 text-white font-semibold flex-shrink-0 border border-white/10 hover:border-white/30 transition-all">
+                                    <div className="w-9 h-9 rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center cursor-pointer shadow-md shadow-violet-500/20 text-white font-semibold flex-shrink-0 border border-white/10 hover:border-white/30 transition-all">
                                         {user.email?.charAt(0).toUpperCase() || 'U'}
                                     </div>
                                 </DropdownMenuTrigger>
@@ -144,7 +144,7 @@ export default function Navbar() {
                             <Link href="/signup">
                                 <Button
                                     size="sm"
-                                    className="text-sm bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-white border-0 h-9 px-5 rounded-xl shadow-md shadow-emerald-500/20 font-semibold"
+                                    className="text-sm bg-gradient-to-r from-violet-500 to-fuchsia-500 hover:from-violet-400 hover:to-fuchsia-400 text-white border-0 h-9 px-5 rounded-xl shadow-md shadow-violet-500/20 font-semibold"
                                 >
                                     Get Started
                                 </Button>
@@ -174,7 +174,7 @@ export default function Navbar() {
                                     href={link.href}
                                     onClick={() => setMobileOpen(false)}
                                     className={`py-2.5 px-3 rounded-xl text-sm font-medium transition-colors ${isActive
-                                        ? "text-emerald-400 bg-emerald-500/10"
+                                        ? "text-violet-400 bg-violet-500/10"
                                         : "text-slate-400 hover:text-white hover:bg-white/5"
                                         }`}
                                 >
@@ -187,7 +187,7 @@ export default function Navbar() {
                                 <>
                                     <div className="px-3 py-2 text-xs text-slate-500 truncate border-b border-white/5 mb-1">{user.email}</div>
                                     <Link href="/dashboard" onClick={() => setMobileOpen(false)}>
-                                        <Button variant="ghost" className="w-full justify-start text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10 rounded-xl gap-2">
+                                        <Button variant="ghost" className="w-full justify-start text-violet-400 hover:text-violet-300 hover:bg-violet-500/10 rounded-xl gap-2">
                                             <LayoutDashboard className="w-4 h-4" /> Dashboard
                                         </Button>
                                     </Link>
@@ -203,7 +203,7 @@ export default function Navbar() {
                                         </Button>
                                     </Link>
                                     <Link href="/signup" onClick={() => setMobileOpen(false)}>
-                                        <Button className="w-full justify-center bg-gradient-to-r from-emerald-500 to-cyan-500 text-white rounded-xl border-0">
+                                        <Button className="w-full justify-center bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white rounded-xl border-0">
                                             Get Started
                                         </Button>
                                     </Link>

@@ -29,14 +29,14 @@ export default async function SharePage({ params }: SharePageProps) {
     const template = (resume.template as ResumeTemplate) || "modern";
 
     return (
-        <div className="min-h-screen bg-[#060918] flex flex-col noise-overlay">
+        <div className="min-h-screen bg-[#030014] flex flex-col noise-overlay">
             {/* Aurora orbs */}
-            <div className="fixed top-[-10%] left-[-10%] w-[40%] h-[40%] bg-emerald-500/5 rounded-full blur-[120px] pointer-events-none" />
-            <div className="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-cyan-500/5 rounded-full blur-[120px] pointer-events-none" />
+            <div className="fixed top-[-10%] left-[-10%] w-[40%] h-[40%] bg-violet-500/5 rounded-full blur-[120px] pointer-events-none" />
+            <div className="fixed bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-fuchsia-500/5 rounded-full blur-[120px] pointer-events-none" />
 
             <header className="sticky top-0 z-50 glass border-b border-white/5 px-6 h-14 flex items-center justify-between shrink-0">
                 <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-500 to-cyan-500 flex items-center justify-center">
+                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center">
                         <FileText className="w-4 h-4 text-white" />
                     </div>
                     <div>
@@ -52,7 +52,7 @@ export default async function SharePage({ params }: SharePageProps) {
                 <Link href="/">
                     <Button variant="outline" size="sm"
                         className="gap-2 border-white/10 text-slate-400 hover:text-white hover:bg-white/5 rounded-xl h-9 px-4 text-xs font-semibold">
-                        <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
+                        <Sparkles className="w-3.5 h-3.5 text-violet-400" />
                         Build your own
                     </Button>
                 </Link>

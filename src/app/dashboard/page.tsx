@@ -169,15 +169,15 @@ export default function DashboardPage() {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-[#060918] flex items-center justify-center">
-                <Loader2 className="w-8 h-8 animate-spin text-emerald-500" />
+            <div className="min-h-screen bg-[#030014] flex items-center justify-center">
+                <Loader2 className="w-8 h-8 animate-spin text-violet-500" />
             </div>
         );
     }
 
     if (error) {
         return (
-            <div className="min-h-screen bg-[#060918] flex items-center justify-center">
+            <div className="min-h-screen bg-[#030014] flex items-center justify-center">
                 <div className="text-center max-w-md px-6">
                     <div className="w-16 h-16 rounded-2xl bg-red-500/10 flex items-center justify-center mx-auto mb-4">
                         <FileText className="w-8 h-8 text-red-400" />
@@ -186,7 +186,7 @@ export default function DashboardPage() {
                     <p className="text-slate-500 text-sm mb-6">{error}</p>
                     <div className="flex gap-3 justify-center">
                         <Button onClick={() => { setError(null); setLoading(true); fetchResumes(); }}
-                            className="bg-gradient-to-r from-emerald-500 to-cyan-500 text-white border-0 rounded-xl">
+                            className="bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white border-0 rounded-xl">
                             Try Again
                         </Button>
                         <Button variant="outline" onClick={() => router.push("/login")}
@@ -200,7 +200,7 @@ export default function DashboardPage() {
     }
 
     return (
-        <div className="min-h-screen bg-[#060918] flex">
+        <div className="min-h-screen bg-[#030014] flex">
             <Sidebar />
 
             {/* Main Content */}
@@ -219,7 +219,7 @@ export default function DashboardPage() {
                         <div className="flex gap-3">
                             <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
                                 <DialogTrigger asChild>
-                                    <Button className="gap-2 bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-white border-0 rounded-xl shadow-md shadow-emerald-500/20 font-semibold">
+                                    <Button className="gap-2 bg-gradient-to-r from-violet-500 to-fuchsia-500 hover:from-violet-400 hover:to-fuchsia-400 text-white border-0 rounded-xl shadow-md shadow-violet-500/20 font-semibold">
                                         <Plus className="w-4 h-4" /> New Resume
                                     </Button>
                                 </DialogTrigger>
@@ -238,7 +238,7 @@ export default function DashboardPage() {
                                         <Button
                                             onClick={createResume}
                                             disabled={creating || !newTitle.trim()}
-                                            className="w-full bg-gradient-to-r from-emerald-500 to-cyan-500 text-white border-0 rounded-xl"
+                                            className="w-full bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white border-0 rounded-xl"
                                         >
                                             {creating && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
                                             Create Resume
@@ -260,8 +260,8 @@ export default function DashboardPage() {
                     {/* Stats Cards */}
                     <div className="grid grid-cols-3 gap-4 mb-10">
                         {[
-                            { label: "Total Resumes", value: resumes.length, icon: FileText, color: "text-emerald-400" },
-                            { label: "Public", value: publicCount, icon: Globe, color: "text-cyan-400" },
+                            { label: "Total Resumes", value: resumes.length, icon: FileText, color: "text-violet-400" },
+                            { label: "Public", value: publicCount, icon: Globe, color: "text-fuchsia-400" },
                             { label: "Last Edited", value: lastEdited, icon: Clock, color: "text-amber-400" },
                         ].map((stat) => {
                             const Icon = stat.icon;
@@ -282,8 +282,8 @@ export default function DashboardPage() {
                     {/* Resume Grid */}
                     {resumes.length === 0 ? (
                         <div className="text-center py-20">
-                            <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-emerald-500/10 to-cyan-500/10 flex items-center justify-center">
-                                <FileText className="w-10 h-10 text-emerald-400" />
+                            <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-violet-500/10 to-fuchsia-500/10 flex items-center justify-center">
+                                <FileText className="w-10 h-10 text-violet-400" />
                             </div>
                             <h2 className="text-xl font-semibold text-slate-100 mb-2">No resumes yet</h2>
                             <p className="text-slate-500 mb-6 text-sm">
@@ -292,7 +292,7 @@ export default function DashboardPage() {
                             <div className="flex gap-3 justify-center">
                                 <Button
                                     onClick={() => setDialogOpen(true)}
-                                    className="gap-2 bg-gradient-to-r from-emerald-500 to-cyan-500 text-white border-0 rounded-xl"
+                                    className="gap-2 bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white border-0 rounded-xl"
                                 >
                                     <Plus className="w-4 h-4" /> Create Resume
                                 </Button>
@@ -312,11 +312,11 @@ export default function DashboardPage() {
                                 >
                                     <Link href={`/editor/${resume.id}`} className="block p-5">
                                         <div className="flex items-start justify-between mb-4">
-                                            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 flex items-center justify-center">
-                                                <FileText className="w-5 h-5 text-emerald-400" />
+                                            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500/20 to-fuchsia-500/20 flex items-center justify-center">
+                                                <FileText className="w-5 h-5 text-violet-400" />
                                             </div>
                                             {resume.is_public ? (
-                                                <span className="px-2 py-0.5 text-[10px] font-semibold uppercase rounded-full bg-emerald-500/10 text-emerald-400 tracking-wider">
+                                                <span className="px-2 py-0.5 text-[10px] font-semibold uppercase rounded-full bg-violet-500/10 text-violet-400 tracking-wider">
                                                     Public
                                                 </span>
                                             ) : (
@@ -325,7 +325,7 @@ export default function DashboardPage() {
                                                 </span>
                                             )}
                                         </div>
-                                        <h3 className="font-semibold text-slate-100 text-lg mb-1 group-hover:text-emerald-400 transition-colors">
+                                        <h3 className="font-semibold text-slate-100 text-lg mb-1 group-hover:text-violet-400 transition-colors">
                                             {resume.title}
                                         </h3>
                                         <p className="text-xs text-slate-600">

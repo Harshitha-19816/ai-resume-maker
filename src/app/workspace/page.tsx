@@ -21,8 +21,8 @@ const TOOLS = [
         description: "Create professional, ATS-optimized resumes with AI-powered suggestions.",
         icon: FileText,
         href: "/dashboard",
-        color: "bg-emerald-500/10",
-        iconColor: "text-emerald-400",
+        color: "bg-violet-500/10",
+        iconColor: "text-violet-400",
         badge: "Popular"
     }
 ];
@@ -40,7 +40,7 @@ export default function WorkspacePage() {
     }, []);
 
     return (
-        <div className="min-h-screen bg-[#060918] flex">
+        <div className="min-h-screen bg-[#030014] flex">
             <Sidebar />
 
             <main className="flex-1 overflow-auto">
@@ -48,11 +48,11 @@ export default function WorkspacePage() {
                     {/* Header */}
                     <div className="mb-12">
                         <div className="flex items-center gap-2 mb-3">
-                            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-cyan-500 flex items-center justify-center shadow-lg shadow-emerald-500/20">
+                            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center shadow-lg shadow-violet-500/20">
                                 <LayoutDashboard className="w-5 h-5 text-white" />
                             </div>
                             <h1 className="text-3xl font-bold text-slate-100">
-                                Workspace <span className="text-emerald-400">Overview</span>
+                                Workspace <span className="text-violet-400">Overview</span>
                             </h1>
                         </div>
                         <p className="text-slate-500 max-w-2xl">
@@ -68,9 +68,9 @@ export default function WorkspacePage() {
                                 <Link 
                                     key={tool.title} 
                                     href={tool.href}
-                                    className="glass-card group p-8 rounded-3xl border border-white/5 hover:border-emerald-500/30 transition-all duration-300 relative overflow-hidden"
+                                    className="glass-card group p-8 rounded-3xl border border-white/5 hover:border-violet-500/30 transition-all duration-300 relative overflow-hidden"
                                 >
-                                    <div className="absolute -right-8 -bottom-8 w-40 h-40 bg-emerald-500/5 rounded-full blur-[60px] group-hover:bg-emerald-500/10 transition-colors" />
+                                    <div className="absolute -right-8 -bottom-8 w-40 h-40 bg-violet-500/5 rounded-full blur-[60px] group-hover:bg-violet-500/10 transition-colors" />
                                     
                                     <div className="flex items-start justify-between mb-6">
                                         <div className={`w-14 h-14 rounded-2xl ${tool.color} flex items-center justify-center group-hover:scale-110 transition-transform`}>
@@ -83,14 +83,14 @@ export default function WorkspacePage() {
                                         )}
                                     </div>
 
-                                    <h3 className="text-2xl font-bold text-slate-100 mb-3 group-hover:text-emerald-400 transition-colors">
+                                    <h3 className="text-2xl font-bold text-slate-100 mb-3 group-hover:text-violet-400 transition-colors">
                                         {tool.title}
                                     </h3>
                                     <p className="text-slate-400 leading-relaxed mb-8">
                                         {tool.description}
                                     </p>
 
-                                    <div className="flex items-center text-emerald-400 font-semibold text-sm gap-2">
+                                    <div className="flex items-center text-violet-400 font-semibold text-sm gap-2">
                                         Open Tool <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                                     </div>
                                 </Link>
@@ -110,8 +110,8 @@ export default function WorkspacePage() {
                             </div>
                         </div>
                         <div className="glass-card p-6 rounded-2xl border border-white/5 flex items-center gap-4">
-                            <div className="w-12 h-12 rounded-xl bg-cyan-500/10 flex items-center justify-center">
-                                <Sparkles className="w-6 h-6 text-cyan-400" />
+                            <div className="w-12 h-12 rounded-xl bg-fuchsia-500/10 flex items-center justify-center">
+                                <Sparkles className="w-6 h-6 text-fuchsia-400" />
                             </div>
                             <div>
                                 <div className="text-xl font-bold text-slate-100">{TOOLS.length} Pro Tool</div>

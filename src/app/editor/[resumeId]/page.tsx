@@ -269,14 +269,14 @@ export default function EditorPage() {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-[#060918] flex items-center justify-center">
-                <Loader2 className="w-8 h-8 animate-spin text-emerald-500" />
+            <div className="min-h-screen bg-[#030014] flex items-center justify-center">
+                <Loader2 className="w-8 h-8 animate-spin text-violet-500" />
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen flex flex-col bg-[#060918]">
+        <div className="min-h-screen flex flex-col bg-[#030014]">
             {/* Toolbar */}
             <header className="sticky top-0 z-50 border-b border-white/5 glass px-4 h-14 flex items-center justify-between gap-4 no-print overflow-x-auto whitespace-nowrap scrollbar-hide">
                 <div className="flex items-center gap-3 shrink-0">
@@ -286,7 +286,7 @@ export default function EditorPage() {
                         </Button>
                     </Link>
                     <div className="flex items-center gap-2">
-                        <FileText className="w-4 h-4 text-emerald-400" />
+                        <FileText className="w-4 h-4 text-violet-400" />
                         <input
                             value={title}
                             onChange={(e) => saveTitle(e.target.value)}
@@ -297,7 +297,7 @@ export default function EditorPage() {
                         {saving ? (
                             <><Loader2 className="w-3 h-3 animate-spin" /> Saving...</>
                         ) : (
-                            <><Check className="w-3 h-3 text-emerald-500" /> Saved</>
+                            <><Check className="w-3 h-3 text-violet-500" /> Saved</>
                         )}
                     </div>
                 </div>
@@ -324,7 +324,7 @@ export default function EditorPage() {
 
                     <Button variant="outline" size="sm" onClick={optimizeResume} disabled={optimizing}
                         className="h-8 text-xs gap-1 border-white/10 text-slate-400 hover:text-white hover:bg-white/5 rounded-lg">
-                        {optimizing ? <Loader2 className="w-3 h-3 animate-spin" /> : <Sparkles className="w-3 h-3 text-emerald-400" />}
+                        {optimizing ? <Loader2 className="w-3 h-3 animate-spin" /> : <Sparkles className="w-3 h-3 text-violet-400" />}
                         AI Optimize
                     </Button>
 
@@ -339,7 +339,7 @@ export default function EditorPage() {
                     </Button>
 
                     <Button size="sm" onClick={exportPDF} disabled={exporting}
-                        className="h-8 text-xs gap-1 bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-white border-0 rounded-lg">
+                        className="h-8 text-xs gap-1 bg-gradient-to-r from-violet-500 to-fuchsia-500 hover:from-violet-400 hover:to-fuchsia-400 text-white border-0 rounded-lg">
                         {exporting ? <Loader2 className="w-3 h-3 animate-spin" /> : <Download className="w-3 h-3" />}
                         PDF
                     </Button>
@@ -348,7 +348,7 @@ export default function EditorPage() {
 
             {/* Editor Layout */}
             <div className="flex-1 flex flex-col md:flex-row overflow-hidden">
-                <div className="w-full md:w-[480px] h-[50vh] md:h-auto border-b md:border-b-0 md:border-r border-white/5 bg-[#0a0f1e] overflow-y-auto shrink-0">
+                <div className="w-full md:w-[480px] h-[50vh] md:h-auto border-b md:border-b-0 md:border-r border-white/5 bg-[#05010f] overflow-y-auto shrink-0">
                     <ResumeForm data={resumeData} onChange={setResumeData} />
                 </div>
                 <div className="flex-1 overflow-auto bg-[#080d1a] p-4 md:p-8 flex flex-col items-center gap-12">

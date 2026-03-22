@@ -28,8 +28,8 @@ export default function ProfilePage() {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-[#060918] flex items-center justify-center">
-                <Loader2 className="w-8 h-8 animate-spin text-emerald-500" />
+            <div className="min-h-screen bg-[#030014] flex items-center justify-center">
+                <Loader2 className="w-8 h-8 animate-spin text-violet-500" />
             </div>
         );
     }
@@ -37,14 +37,14 @@ export default function ProfilePage() {
     if (!user) return null;
 
     return (
-        <div className="min-h-screen bg-[#060918] flex">
+        <div className="min-h-screen bg-[#030014] flex">
             <Sidebar />
 
             <main className="flex-1 overflow-auto">
                 <div className="max-w-3xl mx-auto px-6 py-10">
                     <div className="mb-10 text-center md:text-left flex items-center gap-4">
-                        <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 flex items-center justify-center">
-                            <UserCircle className="w-8 h-8 text-emerald-400" />
+                        <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-violet-500/20 to-fuchsia-500/20 flex items-center justify-center">
+                            <UserCircle className="w-8 h-8 text-violet-400" />
                         </div>
                         <div>
                             <h1 className="text-3xl font-bold text-slate-100">
@@ -81,8 +81,8 @@ export default function ProfilePage() {
                         {/* Subscription Tier (Placeholder) */}
                         <div>
                             <h2 className="text-lg font-semibold text-slate-200 mb-4 border-b border-white/10 pb-2">Subscription Context</h2>
-                            <div className="glass bg-gradient-to-br from-emerald-500/10 to-cyan-500/10 rounded-xl p-5 border border-emerald-500/20">
-                                <h3 className="font-semibold text-emerald-400 mb-1">AI Pro Plan (Active)</h3>
+                            <div className="glass bg-gradient-to-br from-violet-500/10 to-fuchsia-500/10 rounded-xl p-5 border border-violet-500/20">
+                                <h3 className="font-semibold text-violet-400 mb-1">AI Pro Plan (Active)</h3>
                                 <p className="text-slate-400 text-sm mb-4">You currently have unlimited access to AI templates, YouTube Summarizer, and job search parsing.</p>
                                 <Button className="bg-white/10 hover:bg-white/20 text-white border border-white/10 rounded-xl">
                                     Manage Subscription

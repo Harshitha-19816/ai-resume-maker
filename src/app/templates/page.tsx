@@ -25,14 +25,14 @@ const TEMPLATES = [
         id: "minimal",
         name: "Minimal",
         description: "Ultra-clean design with generous whitespace and subtle typography. Great for designers and modern professionals.",
-        color: "from-emerald-500 to-teal-500",
+        color: "from-violet-500 to-teal-500",
         tag: "Trending",
     },
     {
         id: "professional",
         name: "Sidebar Pro",
         description: "Two-column layout with a dark sidebar for contact info and skills. Makes a strong visual impression.",
-        color: "from-cyan-500 to-blue-500",
+        color: "from-fuchsia-500 to-blue-500",
         tag: "ATS-Friendly",
     },
 ];
@@ -41,7 +41,7 @@ export default function TemplatesPage() {
     const [hoveredId, setHoveredId] = useState<string | null>(null);
 
     return (
-        <div className="min-h-screen bg-[#060918] noise-overlay">
+        <div className="min-h-screen bg-[#030014] noise-overlay">
             <Navbar />
 
             <section className="pt-28 pb-20 px-4">
@@ -49,12 +49,12 @@ export default function TemplatesPage() {
                     {/* Header */}
                     <div className="text-center mb-14">
                         <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass text-sm text-slate-400 mb-5">
-                            <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
+                            <Sparkles className="w-3.5 h-3.5 text-violet-400" />
                             {TEMPLATES.length} Templates Available
                         </div>
                         <h1 className="text-4xl md:text-5xl font-bold text-slate-100 mb-4">
                             Choose Your{" "}
-                            <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+                            <span className="bg-gradient-to-r from-violet-400 to-fuchsia-400 bg-clip-text text-transparent">
                                 Template
                             </span>
                         </h1>
@@ -98,7 +98,7 @@ export default function TemplatesPage() {
                                     <div className={`absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center transition-opacity duration-300 ${hoveredId === template.id ? "opacity-100" : "opacity-0"
                                         }`}>
                                         <Link href="/signup">
-                                            <Button className="gap-2 bg-gradient-to-r from-emerald-500 to-cyan-500 text-white border-0 rounded-xl shadow-lg shadow-emerald-500/20">
+                                            <Button className="gap-2 bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white border-0 rounded-xl shadow-lg shadow-violet-500/20">
                                                 Use Template <ArrowRight className="w-4 h-4" />
                                             </Button>
                                         </Link>
@@ -107,7 +107,7 @@ export default function TemplatesPage() {
 
                                 {/* Info */}
                                 <div className="p-5">
-                                    <h3 className="font-semibold text-lg text-slate-100 mb-1 group-hover:text-emerald-400 transition-colors">
+                                    <h3 className="font-semibold text-lg text-slate-100 mb-1 group-hover:text-violet-400 transition-colors">
                                         {template.name}
                                     </h3>
                                     <p className="text-sm text-slate-500 leading-relaxed">
@@ -124,12 +124,12 @@ export default function TemplatesPage() {
             <footer className="border-t border-white/5 py-8 px-4">
                 <div className="max-w-5xl mx-auto flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                        <div className="w-6 h-6 rounded-md bg-gradient-to-br from-emerald-500 to-cyan-500 flex items-center justify-center">
+                        <div className="w-6 h-6 rounded-md bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center">
                             <FileText className="w-3 h-3 text-white" />
                         </div>
                         <span className="text-sm text-slate-500">AI Resume Studio © 2026</span>
                     </div>
-                    <Link href="/dashboard" className="text-sm text-slate-500 hover:text-emerald-400 transition-colors">
+                    <Link href="/dashboard" className="text-sm text-slate-500 hover:text-violet-400 transition-colors">
                         Go to Dashboard →
                     </Link>
                 </div>

@@ -21,13 +21,13 @@ const FEATURES = [
     icon: Brain,
     title: "AI-Powered Content",
     description: "Generate professional summaries and bullet points with a single click.",
-    gradient: "from-emerald-500 to-cyan-500",
+    gradient: "from-violet-500 to-fuchsia-500",
   },
   {
     icon: Palette,
     title: "Beautiful Templates",
     description: "Choose from 4 professionally designed templates that stand out.",
-    gradient: "from-cyan-500 to-blue-500",
+    gradient: "from-fuchsia-500 to-blue-500",
   },
   {
     icon: Download,
@@ -75,7 +75,7 @@ const STEPS = [
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-[#060918] noise-overlay">
+    <div className="min-h-screen bg-[#030014] noise-overlay">
       <Navbar />
 
       {/* Hero Section */}
@@ -83,13 +83,13 @@ export default function HomePage() {
         <div className="aurora-hero absolute inset-0" />
 
         {/* Floating orbs */}
-        <div className="absolute top-20 left-[15%] w-72 h-72 bg-emerald-500/8 rounded-full blur-[120px] animate-glow" />
-        <div className="absolute bottom-10 right-[10%] w-96 h-96 bg-cyan-500/6 rounded-full blur-[140px] animate-glow delay-200" />
+        <div className="absolute top-20 left-[15%] w-72 h-72 bg-violet-500/8 rounded-full blur-[120px] animate-glow" />
+        <div className="absolute bottom-10 right-[10%] w-96 h-96 bg-fuchsia-500/6 rounded-full blur-[140px] animate-glow delay-200" />
 
         <div className="relative max-w-4xl mx-auto text-center">
           {/* Badge */}
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass mb-8 animate-fade-up opacity-0">
-            <Sparkles className="w-4 h-4 text-emerald-400" />
+            <Sparkles className="w-4 h-4 text-violet-400" />
             <span className="text-sm text-slate-300 font-medium">Ultimate AI Career Workspace</span>
           </div>
 
@@ -97,7 +97,7 @@ export default function HomePage() {
           <h1 className="text-5xl md:text-7xl font-bold tracking-tight leading-[1.1] mb-6 animate-fade-up opacity-0 delay-100">
             <span className="text-slate-100">All Your Professional</span>
             <br />
-            <span className="bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-400 bg-clip-text text-transparent animate-gradient">
+            <span className="bg-gradient-to-r from-violet-400 via-fuchsia-400 to-blue-400 bg-clip-text text-transparent animate-gradient">
               AI Tools in One Place
             </span>
           </h1>
@@ -113,7 +113,7 @@ export default function HomePage() {
             <Link href="/signup">
               <Button
                 size="lg"
-                className="text-base px-8 py-6 bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-white border-0 rounded-2xl shadow-lg shadow-emerald-500/25 font-semibold gap-2"
+                className="text-base px-8 py-6 bg-gradient-to-r from-violet-500 to-fuchsia-500 hover:from-violet-400 hover:to-fuchsia-400 text-white border-0 rounded-2xl shadow-lg shadow-violet-500/25 font-semibold gap-2"
               >
                 Start Building <ArrowRight className="w-4 h-4" />
               </Button>
@@ -154,7 +154,7 @@ export default function HomePage() {
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-slate-100 mb-4">
               Everything You Need to{" "}
-              <span className="text-emerald-400">Stand Out</span>
+              <span className="text-violet-400">Stand Out</span>
             </h2>
             <p className="text-slate-400 max-w-xl mx-auto">
               Professional tools designed to help you create the perfect resume in minutes, not hours.
@@ -194,7 +194,7 @@ export default function HomePage() {
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-slate-100 mb-4">
               Three Steps to Your{" "}
-              <span className="text-cyan-400">Dream Resume</span>
+              <span className="text-fuchsia-400">Dream Resume</span>
             </h2>
             <p className="text-slate-400 max-w-lg mx-auto">
               Our guided process makes it effortless to go from blank page to polished resume.
@@ -208,8 +208,8 @@ export default function HomePage() {
                 {i < STEPS.length - 1 && (
                   <div className="hidden md:block absolute top-8 left-[60%] w-[80%] border-t border-dashed border-slate-700/50" />
                 )}
-                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-500/10 to-cyan-500/10 border border-emerald-500/20 flex items-center justify-center mx-auto mb-5">
-                  <span className="text-xl font-bold text-emerald-400">{item.step}</span>
+                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-violet-500/10 to-fuchsia-500/10 border border-violet-500/20 flex items-center justify-center mx-auto mb-5">
+                  <span className="text-xl font-bold text-violet-400">{item.step}</span>
                 </div>
                 <h3 className="text-lg font-semibold text-slate-100 mb-2">{item.title}</h3>
                 <p className="text-sm text-slate-400 leading-relaxed max-w-xs mx-auto">
@@ -224,8 +224,8 @@ export default function HomePage() {
       {/* CTA Section */}
       <section className="py-20 px-4">
         <div className="max-w-3xl mx-auto text-center glass-card rounded-3xl p-12 relative overflow-hidden">
-          <div className="absolute -top-20 -right-20 w-60 h-60 bg-emerald-500/10 rounded-full blur-[80px]" />
-          <div className="absolute -bottom-20 -left-20 w-60 h-60 bg-cyan-500/8 rounded-full blur-[80px]" />
+          <div className="absolute -top-20 -right-20 w-60 h-60 bg-violet-500/10 rounded-full blur-[80px]" />
+          <div className="absolute -bottom-20 -left-20 w-60 h-60 bg-fuchsia-500/8 rounded-full blur-[80px]" />
 
           <div className="relative">
             <h2 className="text-3xl md:text-4xl font-bold text-slate-100 mb-4">
@@ -237,7 +237,7 @@ export default function HomePage() {
             <Link href="/signup">
               <Button
                 size="lg"
-                className="text-base px-10 py-6 bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-white border-0 rounded-2xl shadow-lg shadow-emerald-500/25 font-semibold gap-2"
+                className="text-base px-10 py-6 bg-gradient-to-r from-violet-500 to-fuchsia-500 hover:from-violet-400 hover:to-fuchsia-400 text-white border-0 rounded-2xl shadow-lg shadow-violet-500/25 font-semibold gap-2"
               >
                 Get Started — It&apos;s Free <ArrowRight className="w-4 h-4" />
               </Button>
@@ -253,11 +253,11 @@ export default function HomePage() {
             {/* Brand */}
             <div>
               <div className="flex items-center gap-2 mb-4">
-                <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-emerald-500 to-cyan-500 flex items-center justify-center">
+                <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center">
                   <FileText className="w-3.5 h-3.5 text-white" />
                 </div>
                 <span className="font-bold text-slate-200 uppercase tracking-wider">
-                  AI Tools <span className="text-emerald-400">Hub</span>
+                  AI Tools <span className="text-violet-400">Hub</span>
                 </span>
               </div>
               <p className="text-sm text-slate-500 leading-relaxed">
@@ -270,15 +270,15 @@ export default function HomePage() {
               <div>
                 <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Product</h4>
                 <div className="space-y-2">
-                  <Link href="/templates" className="block text-sm text-slate-500 hover:text-emerald-400 transition-colors">Templates</Link>
-                  <Link href="/dashboard" className="block text-sm text-slate-500 hover:text-emerald-400 transition-colors">Dashboard</Link>
+                  <Link href="/templates" className="block text-sm text-slate-500 hover:text-violet-400 transition-colors">Templates</Link>
+                  <Link href="/dashboard" className="block text-sm text-slate-500 hover:text-violet-400 transition-colors">Dashboard</Link>
                 </div>
               </div>
               <div>
                 <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Account</h4>
                 <div className="space-y-2">
-                  <Link href="/login" className="block text-sm text-slate-500 hover:text-emerald-400 transition-colors">Sign In</Link>
-                  <Link href="/signup" className="block text-sm text-slate-500 hover:text-emerald-400 transition-colors">Sign Up</Link>
+                  <Link href="/login" className="block text-sm text-slate-500 hover:text-violet-400 transition-colors">Sign In</Link>
+                  <Link href="/signup" className="block text-sm text-slate-500 hover:text-violet-400 transition-colors">Sign Up</Link>
                 </div>
               </div>
             </div>

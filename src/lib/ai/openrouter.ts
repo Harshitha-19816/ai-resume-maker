@@ -93,3 +93,41 @@ Limit each array to 3 high-quality questions specific to the requested skill.`,
             `Provide an expert answer to this interview question:\n\n${input}`,
     },
 };
+
+export async function generateSkillSuggestions(
+    jobTitle: string,
+    experienceContext: string,
+    educationContext: string,
+    existingSkills: string
+): Promise<string[]> {
+    const prompt = `Based on the following profile, suggest 8-10 highly relevant and in-demand skills (technical, tools, and soft skills).
+Ensure the suggestions do NOT include these existing skills: ${existingSkills || 'None'}.
+
+Target Role / Job Title: ${jobTitle}
+Experience Context: ${experienceContext || 'None'}
+Education Context: ${educationContext || 'None'}
+
+Return ONLY a valid JSON array of strings. Example: ["React", "TypeScript", "Agile"]. Do NOT wrap in markdown \`\`\`json block.`;
+
+    const response = await callAI({
+        systemPrompt: "You are an expert career coach. You only output valid JSON arrays.",
+        userPrompt: prompt,
+        temperature: 0.6
+    });
+
+    try {
+        let cleanJson = response.trim();
+        if (cleanJson.startsWith("```json")) {
+            cleanJson = cleanJson.substring(7, cleanJson.length - 3).trim();
+        } else if (cleanJson.startsWith("```")) {
+            cleanJson = cleanJson.substring(3, cleanJson.length - 3).trim();
+        }
+        return JSON.parse(cleanJson);
+    } catch {
+        // Fallback string parsing
+        return response
+            .split(/[\n,]/)
+            .map(s => s.replace(/^[-\*\•\d\.\s"\[\]]+/, '').replace(/["\]]+$/, '').trim())
+            .filter(Boolean);
+    }
+}

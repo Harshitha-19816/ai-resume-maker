@@ -231,7 +231,40 @@ export default function ResumeForm({ data, onChange }: ResumeFormProps) {
         }
     };
 
-    const inputClass = "bg-white/5 border-white/8 text-slate-100 placeholder:text-slate-600 focus:border-emerald-500/40 focus:ring-emerald-500/20 h-11 rounded-xl";
+    // AI suggest skills
+    const suggestSkills = async () => {
+        setAiLoading("skills");
+        try {
+            const res = await fetch("/api/ai/suggest-skills", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    jobTitle: data.experience[0]?.position || data.personalInfo.fullName || "Professional",
+                    experienceContext: data.experience.map(e => `${e.position} at ${e.company}`).join(", "),
+                    educationContext: data.education.map(e => `${e.degree} in ${e.field}`).join(", "),
+                    existingSkills: data.skills.join(", ")
+                }),
+            });
+            const result = await res.json();
+            if (result.skills && Array.isArray(result.skills)) {
+                const newSkills = result.skills.filter((s: string) => !data.skills.includes(s));
+                if (newSkills.length > 0) {
+                    onChange({ ...data, skills: [...data.skills, ...newSkills] });
+                    toast.success(`Added ${newSkills.length} new skills!`);
+                } else {
+                    toast.info("No new unique skills suggested.");
+                }
+            } else {
+                toast.error(result.error || "Failed to suggest skills");
+            }
+        } catch {
+            toast.error("Failed to connect to AI server");
+        } finally {
+            setAiLoading(null);
+        }
+    };
+
+    const inputClass = "bg-white/5 border-white/8 text-slate-100 placeholder:text-slate-600 focus:border-violet-500/40 focus:ring-violet-500/20 h-11 rounded-xl";
     const labelClass = "text-slate-500 text-xs uppercase tracking-wider font-medium";
 
     const renderStep = () => {
@@ -240,7 +273,7 @@ export default function ResumeForm({ data, onChange }: ResumeFormProps) {
                 return (
                     <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-300">
                         <div className="flex items-center gap-2 mb-6 text-slate-100 font-bold text-lg">
-                            <User className="w-5 h-5 text-emerald-400" />
+                            <User className="w-5 h-5 text-violet-400" />
                             Personal Information
                         </div>
                         <div className="grid grid-cols-2 gap-4">
@@ -320,7 +353,7 @@ export default function ResumeForm({ data, onChange }: ResumeFormProps) {
                                     size="sm"
                                     onClick={generateSummary}
                                     disabled={aiLoading === "summary"}
-                                    className="text-xs gap-1.5 text-emerald-400 hover:text-emerald-300 hover:bg-emerald-500/10 h-8 px-3 rounded-full"
+                                    className="text-xs gap-1.5 text-violet-400 hover:text-violet-300 hover:bg-violet-500/10 h-8 px-3 rounded-full"
                                 >
                                     {aiLoading === "summary" ? (
                                         <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -334,7 +367,7 @@ export default function ResumeForm({ data, onChange }: ResumeFormProps) {
                                 value={data.personalInfo.summary}
                                 onChange={(e) => updatePersonalInfo("summary", e.target.value)}
                                 placeholder="Briefly describe your professional background..."
-                                className="bg-white/5 border-white/8 text-slate-100 min-h-[140px] resize-none leading-relaxed rounded-xl focus:border-emerald-500/40"
+                                className="bg-white/5 border-white/8 text-slate-100 min-h-[140px] resize-none leading-relaxed rounded-xl focus:border-violet-500/40"
                             />
                         </div>
                     </div>
@@ -344,7 +377,7 @@ export default function ResumeForm({ data, onChange }: ResumeFormProps) {
                     <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-300">
                         <div className="flex items-center justify-between mb-8">
                             <div className="flex items-center gap-2 text-slate-100 font-bold text-lg">
-                                <Briefcase className="w-5 h-5 text-emerald-400" />
+                                <Briefcase className="w-5 h-5 text-violet-400" />
                                 Work Experience
                             </div>
                             <Button variant="outline" size="sm" onClick={addExperience}
@@ -400,7 +433,7 @@ export default function ResumeForm({ data, onChange }: ResumeFormProps) {
                                             <Button variant="ghost" size="sm"
                                                 onClick={() => improveExperience(index)}
                                                 disabled={aiLoading === `exp-${index}`}
-                                                className="text-[10px] gap-1 text-emerald-400 hover:text-emerald-300 h-6 px-2">
+                                                className="text-[10px] gap-1 text-violet-400 hover:text-violet-300 h-6 px-2">
                                                 {aiLoading === `exp-${index}` ? (
                                                     <Loader2 className="w-3 h-3 animate-spin" />
                                                 ) : (
@@ -415,7 +448,7 @@ export default function ResumeForm({ data, onChange }: ResumeFormProps) {
                                                     value={desc}
                                                     onChange={(e) => updateExpDescription(index, dIndex, e.target.value)}
                                                     placeholder="Describe your impact and achievements..."
-                                                    className="bg-white/5 border-white/5 text-sm text-slate-100 min-h-[44px] resize-none rounded-xl focus:border-emerald-500/40"
+                                                    className="bg-white/5 border-white/5 text-sm text-slate-100 min-h-[44px] resize-none rounded-xl focus:border-violet-500/40"
                                                     rows={2}
                                                 />
                                                 <Button variant="ghost" size="icon"
@@ -441,7 +474,7 @@ export default function ResumeForm({ data, onChange }: ResumeFormProps) {
                     <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-300">
                         <div className="flex items-center justify-between mb-8">
                             <div className="flex items-center gap-2 text-slate-100 font-bold text-lg">
-                                <GraduationCap className="w-5 h-5 text-emerald-400" />
+                                <GraduationCap className="w-5 h-5 text-violet-400" />
                                 Education
                             </div>
                             <Button variant="outline" size="sm" onClick={addEducation}
@@ -505,9 +538,25 @@ export default function ResumeForm({ data, onChange }: ResumeFormProps) {
                 return (
                     <div className="space-y-8 animate-in fade-in slide-in-from-right-4 duration-300">
                         <section>
-                            <div className="flex items-center gap-2 text-slate-100 font-bold text-lg mb-6">
-                                <Wrench className="w-5 h-5 text-emerald-400" />
-                                Skills & Technologies
+                            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+                                <div className="flex items-center gap-2 text-slate-100 font-bold text-lg">
+                                    <Wrench className="w-5 h-5 text-violet-400" />
+                                    Skills & Technologies
+                                </div>
+                                <Button 
+                                    variant="outline" 
+                                    size="sm"
+                                    onClick={suggestSkills}
+                                    disabled={aiLoading === "skills"}
+                                    className="gap-1.5 h-9 border-violet-500/30 text-violet-400 hover:text-violet-300 hover:bg-violet-500/10 px-4 rounded-full"
+                                >
+                                    {aiLoading === "skills" ? (
+                                        <Loader2 className="w-4 h-4 animate-spin" />
+                                    ) : (
+                                        <Sparkles className="w-4 h-4" />
+                                    )}
+                                    AI Suggest Skills
+                                </Button>
                             </div>
                             <div className="glass-card p-6 rounded-2xl space-y-4">
                                 <div className="flex gap-2">
@@ -526,7 +575,7 @@ export default function ResumeForm({ data, onChange }: ResumeFormProps) {
                                 <div className="flex flex-wrap gap-2">
                                     {data.skills.map((skill, index) => (
                                         <span key={index}
-                                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-sm">
+                                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-violet-500/10 border border-violet-500/20 text-violet-400 text-sm">
                                             {skill}
                                             <button onClick={() => removeSkill(index)}
                                                 className="hover:text-white transition-colors">
@@ -575,7 +624,7 @@ export default function ResumeForm({ data, onChange }: ResumeFormProps) {
                                                     value={project.description}
                                                     onChange={(e) => updateProject(index, "description", e.target.value)}
                                                     placeholder="What did you achieve in this project?"
-                                                    className="bg-white/5 border-white/8 text-slate-100 min-h-[80px] resize-none rounded-xl focus:border-emerald-500/40"
+                                                    className="bg-white/5 border-white/8 text-slate-100 min-h-[80px] resize-none rounded-xl focus:border-violet-500/40"
                                                     rows={3}
                                                 />
                                             </div>
@@ -598,7 +647,7 @@ export default function ResumeForm({ data, onChange }: ResumeFormProps) {
                 return (
                     <div className="space-y-8 animate-in fade-in slide-in-from-right-4 duration-300">
                         <div className="flex items-center gap-2 text-slate-100 font-bold text-lg mb-6">
-                            <Palette className="w-5 h-5 text-emerald-400" />
+                            <Palette className="w-5 h-5 text-violet-400" />
                             Theme & Formatting
                         </div>
                         <div className="glass-card p-6 rounded-2xl space-y-6">
@@ -615,7 +664,7 @@ export default function ResumeForm({ data, onChange }: ResumeFormProps) {
                                             onClick={() => updateTheme("fontFamily", font.value)}
                                             className={`h-10 rounded-xl text-sm font-medium border transition-colors ${
                                                 (data.theme?.fontFamily || "font-sans") === font.value
-                                                    ? "bg-emerald-500/10 border-emerald-500/50 text-emerald-400"
+                                                    ? "bg-violet-500/10 border-violet-500/50 text-violet-400"
                                                     : "bg-white/5 border-white/10 text-slate-400 hover:text-white"
                                             }`}
                                         >
@@ -638,7 +687,7 @@ export default function ResumeForm({ data, onChange }: ResumeFormProps) {
                                             onClick={() => updateTheme("fontSize", size.value)}
                                             className={`h-10 rounded-xl text-sm font-medium border transition-colors ${
                                                 (data.theme?.fontSize || "text-sm") === size.value
-                                                    ? "bg-emerald-500/10 border-emerald-500/50 text-emerald-400"
+                                                    ? "bg-violet-500/10 border-violet-500/50 text-violet-400"
                                                     : "bg-white/5 border-white/10 text-slate-400 hover:text-white"
                                             }`}
                                         >
@@ -664,7 +713,7 @@ export default function ResumeForm({ data, onChange }: ResumeFormProps) {
                                             onClick={() => updateTheme("bulletStyle", style.value as any)}
                                             className={`h-10 rounded-xl text-sm font-medium border transition-colors ${
                                                 (data.theme?.bulletStyle || "disc") === style.value
-                                                    ? "bg-emerald-500/10 border-emerald-500/50 text-emerald-400"
+                                                    ? "bg-violet-500/10 border-violet-500/50 text-violet-400"
                                                     : "bg-white/5 border-white/10 text-slate-400 hover:text-white"
                                             }`}
                                         >
@@ -684,7 +733,7 @@ export default function ResumeForm({ data, onChange }: ResumeFormProps) {
                                 <button
                                     onClick={() => updateTheme("headingBold", !(data.theme?.headingBold ?? true))}
                                     className={`w-12 h-6 rounded-full transition-colors relative ${
-                                        (data.theme?.headingBold ?? true) ? "bg-emerald-500" : "bg-white/10"
+                                        (data.theme?.headingBold ?? true) ? "bg-violet-500" : "bg-white/10"
                                     }`}
                                 >
                                     <div className={`absolute top-1 left-1 bg-white w-4 h-4 rounded-full transition-transform ${
@@ -701,14 +750,14 @@ export default function ResumeForm({ data, onChange }: ResumeFormProps) {
     };
 
     return (
-        <div className="flex flex-col h-full bg-[#0a0f1e] text-slate-100 overflow-hidden">
+        <div className="flex flex-col h-full bg-[#05010f] text-slate-100 overflow-hidden">
             {/* Step Indicator */}
-            <div className="px-6 py-8 border-b border-white/5 bg-[#0c1225]/80 backdrop-blur-sm sticky top-0 z-20">
+            <div className="px-6 py-8 border-b border-white/5 bg-[#09021a]/80 backdrop-blur-sm sticky top-0 z-20">
                 <div className="flex items-center justify-between relative">
                     {/* Progress Bar */}
                     <div className="absolute top-1/3 left-0 w-full h-0.5 bg-white/5 -translate-y-1/2" />
                     <div
-                        className="absolute top-1/3 left-0 h-0.5 bg-gradient-to-r from-emerald-500 to-cyan-500 -translate-y-1/2 transition-all duration-500 ease-in-out"
+                        className="absolute top-1/3 left-0 h-0.5 bg-gradient-to-r from-violet-500 to-fuchsia-500 -translate-y-1/2 transition-all duration-500 ease-in-out"
                         style={{ width: `${((currentStep - 1) / (STEPS.length - 1)) * 100}%` }}
                     />
 
@@ -724,14 +773,14 @@ export default function ResumeForm({ data, onChange }: ResumeFormProps) {
                                 className="relative z-10 flex flex-col items-center gap-3 transition-all duration-300"
                             >
                                 <div className={`w-10 h-10 rounded-xl flex items-center justify-center border-2 transition-all duration-300 ${isActive
-                                        ? "bg-gradient-to-br from-emerald-500 to-cyan-500 border-emerald-500 text-white shadow-lg shadow-emerald-500/30 scale-110"
+                                        ? "bg-gradient-to-br from-violet-500 to-fuchsia-500 border-violet-500 text-white shadow-lg shadow-violet-500/30 scale-110"
                                         : isCompleted
-                                            ? "bg-[#0c1225] border-emerald-500 text-emerald-400"
-                                            : "bg-[#0c1225] border-white/5 text-slate-600 hover:border-white/10"
+                                            ? "bg-[#09021a] border-violet-500 text-violet-400"
+                                            : "bg-[#09021a] border-white/5 text-slate-600 hover:border-white/10"
                                     }`}>
                                     <Icon className="w-5 h-5" />
                                 </div>
-                                <span className={`text-[10px] font-bold uppercase tracking-widest transition-colors ${isActive ? "text-emerald-400" : "text-slate-600"
+                                <span className={`text-[10px] font-bold uppercase tracking-widest transition-colors ${isActive ? "text-violet-400" : "text-slate-600"
                                     }`}>
                                     {step.name}
                                 </span>
@@ -748,7 +797,7 @@ export default function ResumeForm({ data, onChange }: ResumeFormProps) {
             </div>
 
             {/* Step Navigation Footer */}
-            <div className="px-8 py-5 border-t border-white/5 bg-[#0a0f1e]/80 backdrop-blur-md flex items-center justify-between sticky bottom-0 z-20">
+            <div className="px-8 py-5 border-t border-white/5 bg-[#05010f]/80 backdrop-blur-md flex items-center justify-between sticky bottom-0 z-20">
                 <Button variant="ghost"
                     onClick={() => setCurrentStep((s) => Math.max(1, s - 1))}
                     disabled={currentStep === 1}
@@ -760,12 +809,12 @@ export default function ResumeForm({ data, onChange }: ResumeFormProps) {
                     {currentStep < STEPS.length ? (
                         <Button
                             onClick={() => setCurrentStep((s) => Math.min(STEPS.length, s + 1))}
-                            className="bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-white px-8 rounded-full shadow-lg shadow-emerald-500/20 font-semibold border-0">
+                            className="bg-gradient-to-r from-violet-500 to-fuchsia-500 hover:from-violet-400 hover:to-fuchsia-400 text-white px-8 rounded-full shadow-lg shadow-violet-500/20 font-semibold border-0">
                             Next Step <ChevronRight className="w-4 h-4 ml-2" />
                         </Button>
                     ) : (
                         <div className="text-xs text-slate-600 italic flex items-center gap-2">
-                            <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
+                            <Sparkles className="w-3.5 h-3.5 text-violet-400" />
                             All steps completed
                         </div>
                     )}

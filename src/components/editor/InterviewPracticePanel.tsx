@@ -189,12 +189,12 @@ export default function InterviewPracticePanel({
                             size="sm"
                             onClick={() => generateAnswer(sectionName, index, q.question)}
                             disabled={q.loading}
-                            className="h-8 text-xs bg-white/5 hover:bg-emerald-500/10 hover:text-emerald-400 text-slate-300 border border-white/10"
+                            className="h-8 text-xs bg-white/5 hover:bg-violet-500/10 hover:text-violet-400 text-slate-300 border border-white/10"
                         >
                             {q.loading ? (
                                 <><Loader2 className="w-3 h-3 mr-2 animate-spin" /> Thinking...</>
                             ) : (
-                                <><Brain className="w-3 h-3 mr-2 text-emerald-500" /> Generate Answer</>
+                                <><Brain className="w-3 h-3 mr-2 text-violet-500" /> Generate Answer</>
                             )}
                         </Button>
                     </div>
@@ -202,10 +202,10 @@ export default function InterviewPracticePanel({
 
                 {q.answer && (
                     <div className="mt-4 pt-4 border-t border-white/5">
-                        <div className="flex items-center gap-2 text-emerald-400 text-xs font-bold uppercase tracking-wider mb-2">
+                        <div className="flex items-center gap-2 text-violet-400 text-xs font-bold uppercase tracking-wider mb-2">
                             <Sparkles className="w-3 h-3" /> AI Suggested Answer
                         </div>
-                        <div className="text-slate-400 text-sm leading-relaxed whitespace-pre-wrap pl-4 border-l-2 border-emerald-500/30">
+                        <div className="text-slate-400 text-sm leading-relaxed whitespace-pre-wrap pl-4 border-l-2 border-violet-500/30">
                             {q.answer}
                         </div>
                     </div>
@@ -218,7 +218,7 @@ export default function InterviewPracticePanel({
         if (!qList || qList.length === 0) return null;
         return (
             <div className="mb-8">
-                <div className="flex items-center gap-2 text-emerald-400 font-bold mb-4 pb-2 border-b border-white/5">
+                <div className="flex items-center gap-2 text-violet-400 font-bold mb-4 pb-2 border-b border-white/5">
                     {icon}
                     <h3>{title}</h3>
                 </div>
@@ -230,14 +230,14 @@ export default function InterviewPracticePanel({
     };
 
     return (
-        <div className="w-full max-w-[210mm] mx-auto mt-12 bg-[#0a0f1e] border border-white/5 rounded-3xl p-4 md:p-8 shadow-2xl relative overflow-hidden">
-            <div className="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
-            <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="w-full max-w-[210mm] mx-auto mt-12 bg-[#05010f] border border-white/5 rounded-3xl p-4 md:p-8 shadow-2xl relative overflow-hidden">
+            <div className="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 bg-violet-500/10 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-64 h-64 bg-fuchsia-500/10 rounded-full blur-3xl pointer-events-none" />
             
             <div className="relative z-10 flex flex-col mb-8 border-b border-white/5 pb-8 space-y-6">
                 <div>
                     <div className="flex items-center gap-3 text-2xl font-bold text-slate-100 mb-2">
-                        <Target className="w-8 h-8 text-emerald-400 p-1.5 bg-emerald-500/10 rounded-xl border border-emerald-500/20" />
+                        <Target className="w-8 h-8 text-violet-400 p-1.5 bg-violet-500/10 rounded-xl border border-violet-500/20" />
                         AI Interview Practice
                     </div>
                     <p className="text-slate-400 text-sm">
@@ -249,7 +249,7 @@ export default function InterviewPracticePanel({
                     <Button
                         onClick={generateGeneralQuestions}
                         disabled={loading || skillLoading}
-                        className="flex-1 bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-white border-0 shadow-lg shadow-emerald-500/20 gap-2 h-11 rounded-xl font-semibold transition-all hover:scale-[1.02]"
+                        className="flex-1 bg-gradient-to-r from-violet-500 to-fuchsia-500 hover:from-violet-400 hover:to-fuchsia-400 text-white border-0 shadow-lg shadow-violet-500/20 gap-2 h-11 rounded-xl font-semibold transition-all hover:scale-[1.02]"
                     >
                         {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Layers className="w-4 h-4" />}
                         Generate Full Mock Interview
@@ -279,7 +279,7 @@ export default function InterviewPracticePanel({
             </div>
 
             {(loading || skillLoading) && (
-                <div className="flex flex-col items-center justify-center py-16 space-y-4 text-emerald-500">
+                <div className="flex flex-col items-center justify-center py-16 space-y-4 text-violet-500">
                     <Loader2 className="w-10 h-10 animate-spin" />
                     <p className="text-slate-400 text-sm animate-pulse">Analyzing context & tailoring questions...</p>
                 </div>
@@ -287,7 +287,7 @@ export default function InterviewPracticePanel({
 
             {hasQuestions && !(loading || skillLoading) && (
                 <div className="relative z-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
-                    {renderSection("Warm-up & Foundations", <Brain className="w-5 h-5" />, beginner, "Beginner", "bg-emerald-500/20 text-emerald-400", "beginner")}
+                    {renderSection("Warm-up & Foundations", <Brain className="w-5 h-5" />, beginner, "Beginner", "bg-violet-500/20 text-violet-400", "beginner")}
                     {renderSection("Core Competencies", <Layers className="w-5 h-5" />, intermediate, "Intermediate", "bg-blue-500/20 text-blue-400", "intermediate")}
                     {renderSection("Advanced & Architectural", <Target className="w-5 h-5" />, advanced, "Advanced", "bg-purple-500/20 text-purple-400", "advanced")}
                     {renderSection("Coding & Algorithms", <Code className="w-5 h-5" />, coding, "Coding", "bg-orange-500/20 text-orange-400", "coding")}
